@@ -1,0 +1,91 @@
+ref_no,project_title,procuring_entity,municipality,publish_year,abc_php,contract_amount_php,awardee,duration_days,surface_type,surface_thickness_mm,total_paving_area_sqm,length_m,width_m,scope_flag_ancillary,_synthetic_injected_anomaly
+SYN-20240000,"[SYNTHETIC] Concreting of Demo Road, Rapu-Rapu",SYNTHETIC - DPWH Albay Demo DEO,Camalig,2024,34365187.18,32766141.98,Synthetic Builders F,275.0,PCCP,300.0,,2303.0,5.0,False,False
+SYN-20220001,"[SYNTHETIC] Concreting of Demo Road, Oas",SYNTHETIC - DPWH Albay Demo DEO,Rapu-Rapu,2022,10863038.17,9817877.09,Synthetic Builders A,79.0,PCCP,300.0,3336.7,547.0,6.1,False,False
+SYN-20230002,"[SYNTHETIC] Concreting of Demo Road, Manito",SYNTHETIC - DPWH Albay Demo DEO,Daraga,2023,30483649.73,27458586.15,Synthetic Builders G,152.0,PCCP,280.0,,1761.0,5.0,False,False
+SYN-20240003,"[SYNTHETIC] Concreting of Demo Road, Malinao",SYNTHETIC - DPWH Albay Demo DEO,Manito,2024,57942245.29,55860677.77,Synthetic Builders B,189.0,PCCP,300.0,12198.3,1671.0,7.3,True,False
+SYN-20220004,"[SYNTHETIC] Concreting of Demo Road, Daraga",SYNTHETIC - DPWH Albay Demo DEO,Polangui,2022,41293104.11,37942213.32,Synthetic Builders D,251.0,PCCP,280.0,13265.0,2653.0,5.0,False,False
+SYN-20230005,"[SYNTHETIC] Concreting of Demo Road, Sto. Domingo",SYNTHETIC - DPWH Albay Demo DEO,Libon,2023,32031252.43,31087014.28,Synthetic Builders C,173.0,PCCP,300.0,8542.5,1275.0,6.7,False,False
+SYN-20240006,"[SYNTHETIC] Concreting of Demo Road, Guinobatan",SYNTHETIC - DPWH Albay Demo DEO,Libon,2024,57760428.8,56809282.1,Synthetic Builders J,339.0,PCCP,300.0,13979.5,1915.0,7.3,True,False
+SYN-20200007,"[SYNTHETIC] Concreting of Demo Road, Libon",SYNTHETIC - DPWH Albay Demo DEO,Sto. Domingo,2020,11074367.65,10521507.42,Synthetic Builders A,96.0,ASPHALT,250.0,3082.0,460.0,6.7,False,True
+SYN-20190008,"[SYNTHETIC] Concreting of Demo Road, Guinobatan",SYNTHETIC - DPWH Albay Demo DEO,Sto. Domingo,2019,20750884.63,19351812.6,Synthetic Builders F,171.0,ASPHALT,300.0,9833.1,1347.0,7.3,False,False
+SYN-20200009,"[SYNTHETIC] Concreting of Demo Road, Legazpi City",SYNTHETIC - DPWH Albay Demo DEO,Rapu-Rapu,2020,30745039.18,27641682.42,Synthetic Builders E,207.0,PCCP,300.0,8555.6,1172.0,7.3,False,False
+SYN-20200010,"[SYNTHETIC] Concreting of Demo Road, Camalig",SYNTHETIC - DPWH Albay Demo DEO,Camalig,2020,19470809.59,19135776.92,Synthetic Builders F,125.0,PCCP,230.0,5153.8,706.0,7.3,True,False
+SYN-20240011,"[SYNTHETIC] Concreting of Demo Road, Polangui",SYNTHETIC - DPWH Albay Demo DEO,Sto. Domingo,2024,46437434.42,42780414.0,Synthetic Builders F,310.0,PCCP,200.0,16776.8,2504.0,6.7,True,False
+SYN-20240012,"[SYNTHETIC] Concreting of Demo Road, Rapu-Rapu",SYNTHETIC - DPWH Albay Demo DEO,Malinao,2024,24224681.01,22917127.34,Synthetic Builders B,214.0,PCCP,200.0,,1325.0,6.7,False,False
+SYN-20190013,"[SYNTHETIC] Concreting of Demo Road, Sto. Domingo",SYNTHETIC - DPWH Albay Demo DEO,Manito,2019,44565781.53,43872373.59,Synthetic Builders D,455.0,PCCP,200.0,19718.1,2943.0,6.7,True,False
+SYN-20210014,"[SYNTHETIC] Concreting of Demo Road, Ligao City",SYNTHETIC - DPWH Albay Demo DEO,Tabaco City,2021,47165428.23,42235718.81,Synthetic Builders F,189.0,ASPHALT,250.0,13818.9,1893.0,7.3,True,False
+SYN-20230015,"[SYNTHETIC] Concreting of Demo Road, Camalig",SYNTHETIC - DPWH Albay Demo DEO,Manito,2023,26924911.6,24850118.68,Synthetic Builders B,213.0,PCCP,,11797.4,1934.0,6.1,False,False
+SYN-20190016,"[SYNTHETIC] Concreting of Demo Road, Camalig",SYNTHETIC - DPWH Albay Demo DEO,Legazpi City,2019,32146935.24,31657415.33,Synthetic Builders I,302.0,PCCP,230.0,14767.9,2023.0,7.3,False,False
+SYN-20230017,"[SYNTHETIC] Concreting of Demo Road, Rapu-Rapu",SYNTHETIC - DPWH Albay Demo DEO,Malinao,2023,38697153.14,34903472.07,Synthetic Builders I,232.0,PCCP,230.0,15519.8,2126.0,7.3,False,False
+SYN-20190018,"[SYNTHETIC] Concreting of Demo Road, Guinobatan",SYNTHETIC - DPWH Albay Demo DEO,Guinobatan,2019,26458469.38,26135143.7,Synthetic Builders F,125.0,PCCP,280.0,4312.7,707.0,6.1,True,False
+SYN-20210019,"[SYNTHETIC] Concreting of Demo Road, Tiwi",SYNTHETIC - DPWH Albay Demo DEO,Tiwi,2021,21320128.46,21085674.56,Synthetic Builders I,192.0,PCCP,230.0,9082.9,1489.0,6.1,False,False
+SYN-20230020,"[SYNTHETIC] Concreting of Demo Road, Tabaco City",SYNTHETIC - DPWH Albay Demo DEO,Malinao,2023,36533832.55,35135911.0,Synthetic Builders E,102.0,PCCP,300.0,6344.9,947.0,6.7,True,False
+SYN-20200021,"[SYNTHETIC] Concreting of Demo Road, Legazpi City",SYNTHETIC - DPWH Albay Demo DEO,Sto. Domingo,2020,20982192.85,18859464.0,Synthetic Builders F,149.0,PCCP,200.0,10125.1,1387.0,7.3,False,False
+SYN-20210022,"[SYNTHETIC] Concreting of Demo Road, Guinobatan",SYNTHETIC - DPWH Albay Demo DEO,Legazpi City,2021,19509649.62,19432639.28,Synthetic Builders E,68.0,PCCP,300.0,,561.0,5.0,True,False
+SYN-20200023,"[SYNTHETIC] Concreting of Demo Road, Camalig",SYNTHETIC - DPWH Albay Demo DEO,Tiwi,2020,33983763.14,30610904.63,Synthetic Builders B,326.0,PCCP,,14565.0,2913.0,5.0,False,False
+SYN-20230024,"[SYNTHETIC] Concreting of Demo Road, Sto. Domingo",SYNTHETIC - DPWH Albay Demo DEO,Rapu-Rapu,2023,20812949.79,19389862.09,Synthetic Builders B,104.0,PCCP,230.0,4405.0,881.0,5.0,True,False
+SYN-20200025,"[SYNTHETIC] Concreting of Demo Road, Polangui",SYNTHETIC - DPWH Albay Demo DEO,Ligao City,2020,53736332.46,53307410.56,Synthetic Builders F,309.0,PCCP,200.0,12895.4,2114.0,6.1,False,True
+SYN-20240026,"[SYNTHETIC] Concreting of Demo Road, Ligao City",SYNTHETIC - DPWH Albay Demo DEO,Tiwi,2024,13583873.72,12716232.38,Synthetic Builders A,131.0,PCCP,,5555.0,1111.0,5.0,False,False
+SYN-20210027,"[SYNTHETIC] Concreting of Demo Road, Legazpi City",SYNTHETIC - DPWH Albay Demo DEO,Daraga,2021,53751769.12,50946893.67,Synthetic Builders G,416.0,PCCP,250.0,17822.0,2660.0,6.7,False,False
+SYN-20210028,"[SYNTHETIC] Concreting of Demo Road, Tiwi",SYNTHETIC - DPWH Albay Demo DEO,Ligao City,2021,31737791.96,29725991.94,Synthetic Builders D,306.0,PCCP,200.0,13989.6,2088.0,6.7,False,False
+SYN-20220029,"[SYNTHETIC] Concreting of Demo Road, Tabaco City",SYNTHETIC - DPWH Albay Demo DEO,Daraga,2022,16989256.51,15608462.83,Synthetic Builders E,95.0,PCCP,200.0,4781.5,655.0,7.3,True,False
+SYN-20220030,"[SYNTHETIC] Concreting of Demo Road, Oas",SYNTHETIC - DPWH Albay Demo DEO,Daraga,2022,37749446.77,34906833.51,Synthetic Builders I,379.0,PCCP,200.0,17299.4,2582.0,6.7,False,False
+SYN-20220031,"[SYNTHETIC] Concreting of Demo Road, Legazpi City",SYNTHETIC - DPWH Albay Demo DEO,Libon,2022,55242156.35,49338009.66,Synthetic Builders I,364.0,PCCP,280.0,17391.1,2851.0,6.1,False,False
+SYN-20220032,"[SYNTHETIC] Concreting of Demo Road, Oas",SYNTHETIC - DPWH Albay Demo DEO,Manito,2022,43036194.71,42242032.35,Synthetic Builders E,264.0,PCCP,200.0,,2741.0,7.3,False,False
+SYN-20240033,"[SYNTHETIC] Concreting of Demo Road, Tiwi",SYNTHETIC - DPWH Albay Demo DEO,Manito,2024,40350692.4,36764578.02,Synthetic Builders D,253.0,PCCP,200.0,13417.4,1838.0,7.3,True,False
+SYN-20230034,"[SYNTHETIC] Concreting of Demo Road, Oas",SYNTHETIC - DPWH Albay Demo DEO,Oas,2023,12271793.6,11694872.01,Synthetic Builders I,107.0,PCCP,250.0,4643.1,693.0,6.7,False,False
+SYN-20230035,"[SYNTHETIC] Concreting of Demo Road, Guinobatan",SYNTHETIC - DPWH Albay Demo DEO,Daraga,2023,27272242.95,24928994.67,Synthetic Builders F,142.0,PCCP,230.0,5494.0,820.0,6.7,True,False
+SYN-20230036,"[SYNTHETIC] Concreting of Demo Road, Manito",SYNTHETIC - DPWH Albay Demo DEO,Manito,2023,52685512.27,47592474.92,Synthetic Builders H,242.0,PCCP,250.0,17110.5,2805.0,6.1,True,False
+SYN-20220037,"[SYNTHETIC] Concreting of Demo Road, Tiwi",SYNTHETIC - DPWH Albay Demo DEO,Legazpi City,2022,42759510.27,38210893.78,Synthetic Builders B,189.0,PCCP,300.0,,1791.0,6.7,True,False
+SYN-20210038,"[SYNTHETIC] Concreting of Demo Road, Rapu-Rapu",SYNTHETIC - DPWH Albay Demo DEO,Tabaco City,2021,12453082.55,12067817.23,Synthetic Builders H,87.0,PCCP,300.0,3935.0,787.0,5.0,False,False
+SYN-20240039,"[SYNTHETIC] Concreting of Demo Road, Ligao City",SYNTHETIC - DPWH Albay Demo DEO,Tabaco City,2024,71351462.03,67673245.69,Synthetic Builders F,277.0,PCCP,250.0,18002.9,2687.0,6.7,True,False
+SYN-20210040,"[SYNTHETIC] Concreting of Demo Road, Libon",SYNTHETIC - DPWH Albay Demo DEO,Oas,2021,95733479.43,86003591.06,Synthetic Builders C,330.0,PCCP,280.0,14833.6,2032.0,7.3,True,True
+SYN-20200041,"[SYNTHETIC] Concreting of Demo Road, Polangui",SYNTHETIC - DPWH Albay Demo DEO,Daraga,2020,33411856.11,30006464.32,Synthetic Builders H,267.0,ASPHALT,300.0,13417.4,1838.0,7.3,False,False
+SYN-20240042,"[SYNTHETIC] Concreting of Demo Road, Manito",SYNTHETIC - DPWH Albay Demo DEO,Rapu-Rapu,2024,22162453.5,21213268.73,Synthetic Builders F,143.0,PCCP,250.0,8027.6,1316.0,6.1,False,False
+SYN-20190043,"[SYNTHETIC] Concreting of Demo Road, Sto. Domingo",SYNTHETIC - DPWH Albay Demo DEO,Sto. Domingo,2019,34962878.28,31418124.19,Synthetic Builders H,128.0,PCCP,280.0,,1410.0,6.1,True,False
+SYN-20240044,"[SYNTHETIC] Concreting of Demo Road, Tiwi",SYNTHETIC - DPWH Albay Demo DEO,Manito,2024,18800966.91,17927760.58,Synthetic Builders I,108.0,PCCP,230.0,6344.9,947.0,6.7,False,False
+SYN-20220045,"[SYNTHETIC] Concreting of Demo Road, Manito",SYNTHETIC - DPWH Albay Demo DEO,Malinao,2022,7244813.75,6933022.34,Synthetic Builders C,63.0,PCCP,280.0,2458.3,403.0,6.1,False,False
+SYN-20190046,"[SYNTHETIC] Concreting of Demo Road, Tabaco City",SYNTHETIC - DPWH Albay Demo DEO,Tabaco City,2019,49974367.13,45814656.23,Synthetic Builders I,291.0,PCCP,230.0,17862.2,2666.0,6.7,False,False
+SYN-20190047,"[SYNTHETIC] Concreting of Demo Road, Rapu-Rapu",SYNTHETIC - DPWH Albay Demo DEO,Guinobatan,2019,14663930.36,13879129.17,Synthetic Builders J,201.0,PCCP,200.0,7815.0,1563.0,5.0,False,False
+SYN-20210048,"[SYNTHETIC] Concreting of Demo Road, Rapu-Rapu",SYNTHETIC - DPWH Albay Demo DEO,Daraga,2021,21016352.79,19943704.29,Synthetic Builders F,135.0,ASPHALT,280.0,8895.0,1779.0,5.0,False,False
+SYN-20190049,"[SYNTHETIC] Concreting of Demo Road, Camalig",SYNTHETIC - DPWH Albay Demo DEO,Camalig,2019,14360408.23,13724493.7,Synthetic Builders H,152.0,PCCP,250.0,5850.0,1170.0,5.0,False,False
+SYN-20190050,"[SYNTHETIC] Concreting of Demo Road, Oas",SYNTHETIC - DPWH Albay Demo DEO,Polangui,2019,30601390.04,29090530.52,Synthetic Builders H,310.0,PCCP,230.0,14206.9,2329.0,6.1,False,False
+SYN-20220051,"[SYNTHETIC] Concreting of Demo Road, Camalig",SYNTHETIC - DPWH Albay Demo DEO,Sto. Domingo,2022,4209494.28,4140032.33,Synthetic Builders E,54.0,PCCP,200.0,,368.0,5.0,False,False
+SYN-20240052,"[SYNTHETIC] Concreting of Demo Road, Polangui",SYNTHETIC - DPWH Albay Demo DEO,Rapu-Rapu,2024,20484051.23,20335107.6,Synthetic Builders I,128.0,PCCP,230.0,7960.5,1305.0,6.1,False,False
+SYN-20210053,"[SYNTHETIC] Concreting of Demo Road, Manito",SYNTHETIC - DPWH Albay Demo DEO,Polangui,2021,9953526.3,9127662.87,Synthetic Builders E,65.0,PCCP,300.0,2788.6,382.0,7.3,False,False
+SYN-20230054,"[SYNTHETIC] Concreting of Demo Road, Oas",SYNTHETIC - DPWH Albay Demo DEO,Guinobatan,2023,18386173.07,17219710.02,Synthetic Builders I,101.0,PCCP,250.0,4613.6,632.0,7.3,True,False
+SYN-20240055,"[SYNTHETIC] Concreting of Demo Road, Ligao City",SYNTHETIC - DPWH Albay Demo DEO,Ligao City,2024,75207779.41,69596436.07,Synthetic Builders H,431.0,PCCP,300.0,21250.3,2911.0,7.3,True,False
+SYN-20230056,"[SYNTHETIC] Concreting of Demo Road, Malinao",SYNTHETIC - DPWH Albay Demo DEO,Oas,2023,56571258.57,51602916.64,Synthetic Builders F,329.0,PCCP,300.0,13909.2,2076.0,6.7,True,False
+SYN-20220057,"[SYNTHETIC] Concreting of Demo Road, Libon",SYNTHETIC - DPWH Albay Demo DEO,Guinobatan,2022,23931615.09,23288554.3,Synthetic Builders B,117.0,PCCP,300.0,7280.0,1456.0,5.0,False,False
+SYN-20210058,"[SYNTHETIC] Concreting of Demo Road, Malinao",SYNTHETIC - DPWH Albay Demo DEO,Rapu-Rapu,2021,26693870.15,25965467.35,Synthetic Builders I,159.0,PCCP,200.0,11483.8,1714.0,6.7,False,False
+SYN-20220059,"[SYNTHETIC] Concreting of Demo Road, Ligao City",SYNTHETIC - DPWH Albay Demo DEO,Camalig,2022,74106837.31,71715204.38,Synthetic Builders G,348.0,PCCP,200.0,17801.9,2657.0,6.7,True,True
+SYN-20200060,"[SYNTHETIC] Concreting of Demo Road, Oas",SYNTHETIC - DPWH Albay Demo DEO,Polangui,2020,23007817.06,22198225.59,Synthetic Builders F,137.0,PCCP,250.0,,1229.0,7.3,False,False
+SYN-20210061,"[SYNTHETIC] Concreting of Demo Road, Oas",SYNTHETIC - DPWH Albay Demo DEO,Manito,2021,34561133.03,31670186.26,Synthetic Builders H,213.0,PCCP,230.0,11553.4,1894.0,6.1,True,False
+SYN-20210062,"[SYNTHETIC] Concreting of Demo Road, Malinao",SYNTHETIC - DPWH Albay Demo DEO,Rapu-Rapu,2021,36876139.13,35291488.13,Synthetic Builders J,212.0,PCCP,300.0,10730.0,2146.0,5.0,False,False
+SYN-20200063,"[SYNTHETIC] Concreting of Demo Road, Ligao City",SYNTHETIC - DPWH Albay Demo DEO,Tabaco City,2020,17986275.89,17314763.26,Synthetic Builders F,155.0,PCCP,230.0,8442.0,1260.0,6.7,False,False
+SYN-20240064,"[SYNTHETIC] Concreting of Demo Road, Tiwi",SYNTHETIC - DPWH Albay Demo DEO,Camalig,2024,15783254.68,14663598.21,Synthetic Builders D,259.0,ASPHALT,200.0,,1702.0,6.1,False,False
+SYN-20190065,"[SYNTHETIC] Concreting of Demo Road, Malinao",SYNTHETIC - DPWH Albay Demo DEO,Oas,2019,37309209.87,36492205.58,Synthetic Builders I,274.0,PCCP,200.0,15852.2,2366.0,6.7,True,False
+SYN-20190066,"[SYNTHETIC] Concreting of Demo Road, Sto. Domingo",SYNTHETIC - DPWH Albay Demo DEO,Guinobatan,2019,41974042.94,41444775.83,Synthetic Builders G,341.0,PCCP,230.0,16805.5,2755.0,6.1,False,False
+SYN-20200067,"[SYNTHETIC] Concreting of Demo Road, Manito",SYNTHETIC - DPWH Albay Demo DEO,Ligao City,2020,11179393.74,10316367.8,Synthetic Builders E,86.0,PCCP,280.0,4318.8,708.0,6.1,False,False
+SYN-20240068,"[SYNTHETIC] Concreting of Demo Road, Malinao",SYNTHETIC - DPWH Albay Demo DEO,Malinao,2024,42470121.07,38935785.86,Synthetic Builders B,239.0,PCCP,200.0,14100.0,2820.0,5.0,True,False
+SYN-20230069,"[SYNTHETIC] Concreting of Demo Road, Legazpi City",SYNTHETIC - DPWH Albay Demo DEO,Manito,2023,14908631.5,14396633.2,Synthetic Builders E,57.0,PCCP,280.0,2292.2,314.0,7.3,True,False
+SYN-20240070,"[SYNTHETIC] Concreting of Demo Road, Tabaco City",SYNTHETIC - DPWH Albay Demo DEO,Camalig,2024,31858533.89,29599364.16,Synthetic Builders J,230.0,ASPHALT,230.0,17030.9,2333.0,7.3,False,False
+SYN-20200071,"[SYNTHETIC] Concreting of Demo Road, Libon",SYNTHETIC - DPWH Albay Demo DEO,Guinobatan,2020,27128858.96,27018375.74,Synthetic Builders C,286.0,ASPHALT,230.0,15176.8,2488.0,6.1,False,False
+SYN-20230072,"[SYNTHETIC] Concreting of Demo Road, Polangui",SYNTHETIC - DPWH Albay Demo DEO,Oas,2023,9913858.61,9455112.82,Synthetic Builders J,88.0,PCCP,280.0,3345.0,669.0,5.0,False,False
+SYN-20210073,"[SYNTHETIC] Concreting of Demo Road, Tiwi",SYNTHETIC - DPWH Albay Demo DEO,Tiwi,2021,29395281.32,27488795.79,Synthetic Builders J,140.0,PCCP,300.0,9587.7,1431.0,6.7,False,False
+SYN-20210074,"[SYNTHETIC] Concreting of Demo Road, Camalig",SYNTHETIC - DPWH Albay Demo DEO,Ligao City,2021,69145376.35,67104707.22,Synthetic Builders I,255.0,PCCP,250.0,15256.1,2501.0,6.1,False,True
+SYN-20190075,"[SYNTHETIC] Concreting of Demo Road, Guinobatan",SYNTHETIC - DPWH Albay Demo DEO,Manito,2019,5897536.13,5660987.32,Synthetic Builders D,76.0,PCCP,280.0,2271.3,339.0,6.7,False,False
+SYN-20220076,"[SYNTHETIC] Concreting of Demo Road, Rapu-Rapu",SYNTHETIC - DPWH Albay Demo DEO,Malinao,2022,27300060.35,25439280.1,Synthetic Builders H,242.0,PCCP,230.0,9985.0,1997.0,5.0,False,False
+SYN-20230077,"[SYNTHETIC] Concreting of Demo Road, Ligao City",SYNTHETIC - DPWH Albay Demo DEO,Polangui,2023,25957360.72,24241368.97,Synthetic Builders G,166.0,PCCP,200.0,12205.0,2441.0,5.0,False,False
+SYN-20220078,"[SYNTHETIC] Concreting of Demo Road, Libon",SYNTHETIC - DPWH Albay Demo DEO,Libon,2022,32415239.29,31826359.7,Synthetic Builders I,189.0,PCCP,300.0,11289.5,1685.0,6.7,False,False
+SYN-20190079,"[SYNTHETIC] Concreting of Demo Road, Legazpi City",SYNTHETIC - DPWH Albay Demo DEO,Daraga,2019,27424629.03,25281052.94,Synthetic Builders E,268.0,PCCP,280.0,11300.0,2260.0,5.0,False,False
+SYN-20220080,"[SYNTHETIC] Concreting of Demo Road, Tiwi",SYNTHETIC - DPWH Albay Demo DEO,Libon,2022,27667299.18,27404123.32,Synthetic Builders G,120.0,PCCP,,6103.7,911.0,6.7,True,False
+SYN-20200081,"[SYNTHETIC] Concreting of Demo Road, Tabaco City",SYNTHETIC - DPWH Albay Demo DEO,Daraga,2020,16434907.04,14721778.43,Synthetic Builders J,105.0,PCCP,300.0,5099.6,836.0,6.1,False,False
+SYN-20240082,"[SYNTHETIC] Concreting of Demo Road, Guinobatan",SYNTHETIC - DPWH Albay Demo DEO,Legazpi City,2024,32908209.2,32128030.26,Synthetic Builders J,129.0,PCCP,250.0,6400.0,1280.0,5.0,True,False
+SYN-20240083,"[SYNTHETIC] Concreting of Demo Road, Malinao",SYNTHETIC - DPWH Albay Demo DEO,Rapu-Rapu,2024,13263137.42,12871511.68,Synthetic Builders J,95.0,PCCP,200.0,5723.2,784.0,7.3,False,False
+SYN-20200084,"[SYNTHETIC] Concreting of Demo Road, Legazpi City",SYNTHETIC - DPWH Albay Demo DEO,Tabaco City,2020,21369967.27,20868373.68,Synthetic Builders B,124.0,PCCP,250.0,8267.8,1234.0,6.7,False,False
+SYN-20220085,"[SYNTHETIC] Concreting of Demo Road, Daraga",SYNTHETIC - DPWH Albay Demo DEO,Legazpi City,2022,62264792.51,55644246.95,Synthetic Builders A,442.0,PCCP,250.0,20878.0,2860.0,7.3,False,False
+SYN-20240086,"[SYNTHETIC] Concreting of Demo Road, Malinao",SYNTHETIC - DPWH Albay Demo DEO,Polangui,2024,43814662.71,42357915.12,Synthetic Builders A,290.0,PCCP,230.0,,1848.0,7.3,False,False
+SYN-20240087,"[SYNTHETIC] Concreting of Demo Road, Polangui",SYNTHETIC - DPWH Albay Demo DEO,Ligao City,2024,67020944.79,62482522.23,Synthetic Builders J,159.0,PCCP,280.0,8160.6,1218.0,6.7,True,True
+SYN-20230088,"[SYNTHETIC] Concreting of Demo Road, Legazpi City",SYNTHETIC - DPWH Albay Demo DEO,Guinobatan,2023,18174789.04,16243790.59,Synthetic Builders E,121.0,PCCP,230.0,,1033.0,7.3,False,False
+SYN-20220089,"[SYNTHETIC] Concreting of Demo Road, Rapu-Rapu",SYNTHETIC - DPWH Albay Demo DEO,Rapu-Rapu,2022,54449665.17,48877259.58,Synthetic Builders G,226.0,PCCP,280.0,14355.0,2871.0,5.0,True,False

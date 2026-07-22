@@ -1,0 +1,17 @@
+# Data (public procurement data, but keep raw extractions local until cleaned/reviewed)
+data/raw/
+data/processed/
+*.xlsx
+!docs/**
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
