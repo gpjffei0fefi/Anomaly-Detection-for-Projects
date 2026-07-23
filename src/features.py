@@ -13,8 +13,14 @@ from __future__ import annotations
 import pandas as pd
 
 # TODO(Enrique): replace with verified PSA CMWPI annual averages, base year 2019 = 100.
-YEAR_PRICE_INDEX = {2019: 100.0, 2020: 101.5, 2021: 104.0,
-                    2022: 110.0, 2023: 114.0, 2024: 117.0}
+YEAR_PRICE_INDEX = {
+    2019: 100.0,
+    2020: 101.4,
+    2021: 104.24,
+    2022: 112.16,
+    2023: 117.99,
+    2024: 118.7,
+}
 
 FEATURE_COLUMNS = [
     "geometry_sqm",
