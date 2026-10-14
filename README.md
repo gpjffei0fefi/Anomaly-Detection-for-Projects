@@ -104,3 +104,15 @@ All data used is publicly available procurement information published by the Gov
 ## 9. Author
 
 Enrique — Legazpi City Science High School, Mathematical and Computational Science strand.
+
+## 10. Sample Website
+
+`site/` holds a static, single-file sample website built from the pipeline output (synthetic data):
+
+```bash
+python src/run_pipeline.py --input data/sample/sample_projects_SYNTHETIC.csv
+python site/build_site.py --raw data/sample/sample_projects_SYNTHETIC.csv
+# open site/index.html in a browser
+```
+
+It shows a filterable project explorer with a parametric 3D road slab, expected-vs-actual cost chart, MLR vs. XGBoost comparison, and the data-ethics framing. Re-run both commands on real data to regenerate it.

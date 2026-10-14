@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Albay Road Cost Check</title>
+<meta name="description" content="Sample site for the DPWH Albay road-project anomaly screening study, built on synthetic data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a field-survey sheet. Signage-style condensed headings, a road-marking
+   yellow used only for marks and the centerline, data set in mono. */
+:root {
+  --bg: #eef0ed;          /* cured concrete */
+  --panel: #f8f9f7;
+  --ink: #1b2024;
+  --muted: #5b646b;
+  --rule: #cdd2cf;
+  --accent: #e8ae00;      /* road-marking yellow, marks only */
+  --accent-ink: #7a5a00;  /* yellow dark enough for text */
+  --asphalt: #2a2f34;
+  --pccp: #c9ccc7;
+  --high: #b42318;
+  --mod: #b25e00;
+  --none: #8a9399;
+  --high-bg: #fbe6e3;
+  --mod-bg: #fbeedd;
+  --none-bg: #e4e7e6;
+  --banner-bg: #1b2024;
+  --banner-fg: #f2f3f1;
+  --f-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-body: "Public Sans", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15181b; --panel: #1d2125; --ink: #e7e9e6; --muted: #9aa3a9; --rule: #33393f;
+    --accent: #f5c518; --accent-ink: #f5c518; --asphalt: #0d0f11; --pccp: #8d928e;
+    --high: #ff7a6b; --mod: #f0a24a; --none: #7d878d;
+    --high-bg: #3a1d1a; --mod-bg: #36281a; --none-bg: #262b2f;
+    --banner-bg: #f5c518; --banner-fg: #15181b;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15181b; --panel: #1d2125; --ink: #e7e9e6; --muted: #9aa3a9; --rule: #33393f;
+  --accent: #f5c518; --accent-ink: #f5c518; --asphalt: #0d0f11; --pccp: #8d928e;
+  --high: #ff7a6b; --mod: #f0a24a; --none: #7d878d;
+  --high-bg: #3a1d1a; --mod-bg: #36281a; --none-bg: #262b2f;
+  --banner-bg: #f5c518; --banner-fg: #15181b;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 400 16px/1.6 var(--f-body);
+}
+a { color: inherit; text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.wrap { max-width: 1160px; margin: 0 auto; padding-inline: 20px; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 600; line-height: 1.05; text-wrap: balance; margin: 0; }
+h2 { font-size: clamp(30px, 4vw, 40px); letter-spacing: .01em; }
+h3 { font-size: 22px; }
+p { margin: 0; }
+.mono, .num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.label {
+  font: 600 12px/1.2 var(--f-body); text-transform: uppercase; letter-spacing: .09em; color: var(--muted);
+}
+.lede { color: var(--muted); max-width: 62ch; }
+
+/* banner */
+.banner { background: var(--banner-bg); color: var(--banner-fg); font-size: 14px; }
+.banner .wrap { display: flex; gap: 12px; align-items: baseline; padding-block: 10px; flex-wrap: wrap; }
+.banner b { font-family: var(--f-mono); font-weight: 500; letter-spacing: .06em; }
+
+/* header */
+header.top { border-bottom: 1px solid var(--rule); }
+header.top .wrap { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 14px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; font: 700 20px/1 var(--f-display); letter-spacing: .03em; text-transform: uppercase; }
+.brand svg { flex: none; }
+nav.links { display: flex; gap: 18px; flex-wrap: wrap; font-size: 14px; }
+nav.links a { text-decoration: none; color: var(--muted); }
+nav.links a:hover { color: var(--ink); }
+
+/* hero */
+.hero .wrap { padding-block: 56px 36px; display: grid; gap: 40px; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: end; }
+.hero h1 { font-size: clamp(44px, 7vw, 84px); letter-spacing: -.005em; }
+.hero h1 em { font-style: normal; box-shadow: inset 0 -0.16em 0 var(--accent); }
+.hero .lede { margin-top: 20px; font-size: 18px; }
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 2px solid var(--ink); }
+.stat { padding: 14px 0 16px; border-bottom: 1px solid var(--rule); }
+.stat:nth-child(odd) { padding-right: 16px; border-right: 1px solid var(--rule); }
+.stat:nth-child(even) { padding-left: 16px; }
+.stat .v { font: 600 44px/1 var(--f-display); margin-top: 6px; font-variant-numeric: tabular-nums; }
+.stat .v.high { color: var(--high); }
+.stat .v.mod { color: var(--mod); }
+.stat .s { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+section { padding-block: 48px; border-top: 1px solid var(--rule); }
+.sec-head { display: grid; gap: 10px; margin-bottom: 28px; }
+
+/* explorer */
+.explorer { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+.seg button {
+  font: 600 13px/1 var(--f-body); padding: 9px 12px; border: 0; background: var(--panel); color: var(--muted); cursor: pointer;
+}
+.seg button + button { border-left: 1px solid var(--rule); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+select, input[type="search"] {
+  font: 14px var(--f-body); padding: 8px 10px; border: 1px solid var(--rule); border-radius: 4px; background: var(--panel); color: var(--ink);
+}
+input[type="search"] { flex: 1 1 140px; min-width: 0; }
+.table-box { border: 1px solid var(--rule); border-radius: 4px; background: var(--panel); max-height: 560px; overflow: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { padding: 8px 10px; text-align: left; white-space: nowrap; }
+th { position: sticky; top: 0; background: var(--panel); border-bottom: 1px solid var(--rule); z-index: 1; }
+th button { all: unset; cursor: pointer; font: 600 11px/1.2 var(--f-body); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+th button:focus-visible { outline: 2px solid var(--accent); }
+th.r, td.r { text-align: right; }
+tbody tr { cursor: pointer; border-bottom: 1px solid var(--rule); }
+tbody tr:hover { background: var(--bg); }
+tbody tr[aria-selected="true"] { background: var(--bg); box-shadow: inset 3px 0 0 var(--accent); }
+td.num { font-family: var(--f-mono); }
+.pos { color: var(--high); }
+.chip { display: inline-block; font: 600 11px/1 var(--f-body); letter-spacing: .06em; text-transform: uppercase; padding: 4px 7px; border-radius: 3px; }
+.chip.HIGH { background: var(--high-bg); color: var(--high); }
+.chip.MODERATE { background: var(--mod-bg); color: var(--mod); }
+.chip.NONE { background: var(--none-bg); color: var(--muted); }
+.count { font-size: 13px; color: var(--muted); margin-top: 8px; }
+
+.detail { background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: 20px; display: grid; gap: 16px; min-width: 0; }
+.detail .ref { font: 500 13px/1 var(--f-mono); color: var(--muted); }
+.detail h3 { font-size: 26px; margin-top: 6px; }
+.viewer { position: relative; border-radius: 3px; background: var(--bg); overflow: hidden; }
+.viewer canvas { display: block; width: 100%; height: 260px; cursor: grab; touch-action: none; }
+.viewer canvas:active { cursor: grabbing; }
+.viewer .hint { position: absolute; left: 10px; bottom: 8px; font-size: 11px; color: var(--muted); pointer-events: none; }
+.cmp { display: grid; gap: 8px; }
+.bar-row { display: grid; grid-template-columns: 74px minmax(0, 1fr) 84px; gap: 10px; align-items: center; font-size: 13px; }
+.bar-track { height: 12px; background: var(--bg); border-radius: 2px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 2px; }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 16px; margin: 0; }
+.facts div { min-width: 0; }
+.facts dt { font: 600 11px/1.2 var(--f-body); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.facts dd { margin: 3px 0 0; font: 500 14px/1.3 var(--f-mono); overflow-wrap: anywhere; }
+.why { font-size: 15px; border-left: 3px solid var(--rule); padding-left: 12px; }
+.why.HIGH { border-color: var(--high); }
+.why.MODERATE { border-color: var(--mod); }
+.signals { display: flex; gap: 8px; flex-wrap: wrap; font-size: 12px; }
+.signals span { border: 1px solid var(--rule); border-radius: 3px; padding: 3px 7px; color: var(--muted); }
+.signals span.on { border-color: var(--ink); color: var(--ink); }
+
+/* chart */
+.chart-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+.chart-box { overflow-x: auto; }
+svg text { fill: var(--muted); font: 11px var(--f-mono); }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted); margin-top: 8px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+.dot { cursor: pointer; }
+
+/* method */
+ol.steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 2px solid var(--ink); counter-reset: s; }
+ol.steps li { counter-increment: s; padding: 18px 18px 22px 0; border-bottom: 1px solid var(--rule); display: grid; gap: 6px; align-content: start; }
+ol.steps li:not(:nth-child(3n+1)) { padding-left: 18px; border-left: 1px solid var(--rule); }
+ol.steps li::before { content: "STEP " counter(s); font: 500 12px/1 var(--f-mono); color: var(--accent-ink); letter-spacing: .08em; }
+ol.steps h3 { font-size: 22px; }
+ol.steps p { font-size: 14px; color: var(--muted); }
+
+/* models */
+.models { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; }
+.mtable { font-size: 14px; }
+.mtable th { position: static; font: 600 11px/1.2 var(--f-body); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.mtable td, .mtable th { padding: 10px 8px; border-bottom: 1px solid var(--rule); }
+.mtable td.num { font-size: 14px; }
+.best { box-shadow: inset 0 -2px 0 var(--accent); }
+.imp { display: grid; gap: 8px; }
+.imp .bar-row { grid-template-columns: 150px minmax(0, 1fr) 46px; }
+.note { font-size: 14px; color: var(--muted); margin-top: 14px; max-width: 62ch; }
+
+/* ethics */
+.ethics { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; }
+.ethics p + p { margin-top: 12px; }
+.refs { font-size: 14px; color: var(--muted); padding-left: 18px; margin: 10px 0 0; }
+.refs li + li { margin-top: 6px; }
+footer { border-top: 2px solid var(--ink); }
+footer .wrap { padding-block: 22px 40px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+
+@media (max-width: 900px) {
+  .hero .wrap, .explorer, .chart-grid, .models, .ethics { grid-template-columns: minmax(0, 1fr); }
+  ol.steps { grid-template-columns: minmax(0, 1fr); }
+  ol.steps li, ol.steps li:not(:nth-child(3n+1)) { padding-left: 0; border-left: 0; }
+}
+@media (max-width: 520px) {
+  .wrap { padding-inline: 16px; }
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat .v { font-size: 36px; }
+  .imp .bar-row { grid-template-columns: 112px minmax(0, 1fr) 40px; }
+  nav.links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="banner" role="note">
+  <div class="wrap">
+    <b>SAMPLE DATA</b>
+    <span>Every project on this page is synthetic, generated by <span class="mono">src/generate_synthetic_data.py</span>. No real contractor, engineering office, or contract is shown.</span>
+  </div>
+</div>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><path d="M9 2 L2 26 M19 2 L26 26" stroke="currentColor" stroke-width="2.4" fill="none"/><path d="M14 3v4M14 11v5M14 20v5" stroke="var(--accent)" stroke-width="2.4"/></svg>
+      Albay Road Cost Check
+    </div>
+    <nav class="links" aria-label="Sections">
+      <a href="#explorer">Projects</a>
+      <a href="#chart">Expected vs actual</a>
+      <a href="#method">Method</a>
+      <a href="#models">Models</a>
+      <a href="#ethics">Read this first</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <p class="label">DPWH road projects · Albay Province · 2019–2024</p>
+        <h1 style="margin-top:14px">What should this road <em>have cost?</em></h1>
+        <p class="lede">The model predicts a road's expected cost from its paving area, surface thickness, surface type, duration, year, and whether the contract includes non-road works. Projects whose real cost sits far from that pattern are flagged for a closer human look.</p>
+      </div>
+      <div class="stats" id="stats"></div>
+    </div>
+  </div>
+
+  <section id="explorer">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">Project explorer</p>
+        <h2>Pick a project to see its road and why it was flagged</h2>
+      </div>
+      <div class="explorer">
+        <div style="min-width:0">
+          <div class="controls">
+            <div class="seg" role="group" aria-label="Filter by flag">
+              <button type="button" data-f="ALL" aria-pressed="false">All</button>
+              <button type="button" data-f="FLAGGED" aria-pressed="true">Flagged</button>
+              <button type="button" data-f="HIGH" aria-pressed="false">High</button>
+              <button type="button" data-f="MODERATE" aria-pressed="false">Moderate</button>
+            </div>
+            <select id="muni" aria-label="Municipality"><option value="">All municipalities</option></select>
+            <input id="q" type="search" placeholder="Search ref or title" aria-label="Search projects">
+          </div>
+          <div class="table-box">
+            <table id="tbl">
+              <thead><tr>
+                <th><button type="button" data-k="ref">Ref</button></th>
+                <th><button type="button" data-k="muni">Municipality</button></th>
+                <th class="r"><button type="button" data-k="area">Area m²</button></th>
+                <th class="r"><button type="button" data-k="actual">Actual ₱M</button></th>
+                <th class="r"><button type="button" data-k="residPct">vs expected</button></th>
+                <th><button type="button" data-k="score">Flag</button></th>
+              </tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <p class="count" id="count"></p>
+        </div>
+        <article class="detail" id="detail" aria-live="polite"></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="chart">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">Expected vs actual cost</p>
+        <h2>Most roads sit near the line. Flags are the ones that don't.</h2>
+      </div>
+      <div class="chart-grid">
+        <div>
+          <div class="chart-box"><svg id="scatter" viewBox="0 0 640 420" role="img" aria-label="Scatter plot of expected cost against actual cost for each project"></svg></div>
+          <div class="legend">
+            <span><i style="background:var(--high)"></i>High flag</span>
+            <span><i style="background:var(--mod)"></i>Moderate flag</span>
+            <span><i style="background:var(--none)"></i>Within pattern</span>
+            <span>— cost matches prediction</span>
+          </div>
+        </div>
+        <div style="display:grid;gap:14px">
+          <p>Each dot is one project. The horizontal position is what the model expected it to cost; the vertical position is what it actually cost, adjusted to 2019 prices. Click a dot to open it in the explorer.</p>
+          <p class="note" style="margin-top:0">Expected costs are out-of-fold predictions: each project was predicted by a model that never saw it during training, so a project cannot pull its own prediction toward itself.</p>
+          <p class="note" style="margin-top:0">A dot above the line can also mean the model is missing something real, such as difficult terrain or right-of-way costs. That is why every flag goes to a person for review.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="method">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">Method</p>
+        <h2>From a procurement notice to a screening flag</h2>
+      </div>
+      <ol class="steps">
+        <li><h3>Extract</h3><p>Project notices are pulled by hand from PhilGEPS (Category + Area of Delivery = Albay). PhilGEPS has no public API.</p></li>
+        <li><h3>Quality check</h3><p>Each row gets a tier: COMPLETE, USABLE_PARTIAL, USABLE_SPARSE, or UNUSABLE. Paving area comes from the Bill of Quantities, with length × width from the plans as fallback.</p></li>
+        <li><h3>Prepare features</h3><p>Costs are adjusted to 2019 prices. Features: paving area, surface thickness, surface type, duration, year, and an ancillary-works flag.</p></li>
+        <li><h3>Predict expected cost</h3><p>XGBoost and a multiple linear regression baseline, both scored with 5-fold cross-validation. Both results are reported.</p></li>
+        <li><h3>Score anomalies</h3><p>Isolation Forest at 5% (high) and 10% (moderate) contamination. Local Outlier Factor gives a second opinion, and a cost-per-m² rule shows what a spreadsheet check would catch.</p></li>
+        <li><h3>Human review</h3><p>Flags are checked against COA audit findings and news reports where available. A flag starts a question; it does not answer one.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="models">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">Model comparison</p>
+        <h2>Both models, reported side by side</h2>
+      </div>
+      <div class="models">
+        <div style="min-width:0">
+          <div style="overflow-x:auto"><table class="mtable" id="mtable"></table></div>
+          <p class="note" id="mnote"></p>
+        </div>
+        <div style="min-width:0">
+          <h3>What XGBoost leans on</h3>
+          <p class="note" style="margin:6px 0 16px">Feature importance (gain share). Higher means the feature did more of the work in the trees.</p>
+          <div class="imp" id="imp"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ethics">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">Read this first</p>
+        <h2>A flag is a statistical signal, not an accusation</h2>
+      </div>
+      <div class="ethics">
+        <div>
+          <p>A flag means only that a project's cost is unusual compared with similar projects in the dataset. Terrain, right-of-way acquisition, and bridges or drainage bundled into the same contract are common, legitimate reasons for a higher cost.</p>
+          <p>There are no ground-truth labels for real road projects, so the study treats every flag as a prompt for review. The real dataset will use only public procurement data from PhilGEPS and DPWH.</p>
+          <p>This sample site runs on synthetic projects with anomalies injected on purpose, so the page can show how many of them the method recovers.</p>
+        </div>
+        <div>
+          <p class="label">Key references</p>
+          <ul class="refs">
+            <li>Chen, T., &amp; Guestrin, C. (2016). XGBoost: A scalable tree boosting system. <i>KDD '16.</i></li>
+            <li>Liu, F. T., Ting, K. M., &amp; Zhou, Z.-H. (2008). Isolation Forest. <i>ICDM '08.</i></li>
+            <li>DPWH (2013). <i>Standard Specifications for Highways, Bridges and Airports</i>, Items 105, 200, 201, 202.</li>
+          </ul>
+          <p class="note">Aligned with SDG 16.6 (accountable institutions) and SDG 9.1 (resilient infrastructure).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Senior High School research · Mathematical and Computational Science strand · Legazpi City Science High School</span>
+    <span class="mono">Built from data/processed/results.csv</span>
+  </div>
+</footer>
+
+<script>
+const DATA = {"projects":[{"ref":"SYN-20240000","title":"Concreting of Demo Road, Rapu-Rapu","muni":"Camalig","year":2024,"awardee":"Synthetic Builders F","surface":"PCCP","thick":300.0,"length":2303.0,"width":5.0,"area":11515.0,"geomSrc":"PLANS_LXW","tier":"USABLE_PARTIAL","days":275.0,"contract":32766142.0,"actual":27604163.0,"predicted":30364550.0,"residPct":-9.1,"cps":2846.0,"score":0.474,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20220001","title":"Concreting of Demo Road, Oas","muni":"Rapu-Rapu","year":2022,"awardee":"Synthetic Builders A","surface":"PCCP","thick":300.0,"length":547.0,"width":6.1,"area":3337.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":79.0,"contract":9817877.0,"actual":8753457.0,"predicted":11266646.0,"residPct":-22.3,"cps":2942.0,"score":0.49,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 22% less than expected, which is also unusual."},{"ref":"SYN-20230002","title":"Concreting of Demo Road, Manito","muni":"Daraga","year":2023,"awardee":"Synthetic Builders G","surface":"PCCP","thick":280.0,"length":1761.0,"width":5.0,"area":8805.0,"geomSrc":"PLANS_LXW","tier":"USABLE_PARTIAL","days":152.0,"contract":27458586.0,"actual":23271960.0,"predicted":25312362.0,"residPct":-8.1,"cps":3119.0,"score":0.445,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20240003","title":"Concreting of Demo Road, Malinao","muni":"Manito","year":2024,"awardee":"Synthetic Builders B","surface":"PCCP","thick":300.0,"length":1671.0,"width":7.3,"area":12198.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":189.0,"contract":55860678.0,"actual":47060386.0,"predicted":32814952.0,"residPct":43.4,"cps":4579.0,"score":0.515,"flag":"NONE","lof":false,"baseline":true,"ancillary":true,"injected":false,"why":"This project costs 43% more than the model expects for a road of this size, thickness, and year; its cost per square meter (PHP 4,579) is over 1.5x the dataset median (PHP 2,800); note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20220004","title":"Concreting of Demo Road, Daraga","muni":"Polangui","year":2022,"awardee":"Synthetic Builders D","surface":"PCCP","thick":280.0,"length":2653.0,"width":5.0,"area":13265.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":251.0,"contract":37942213.0,"actual":33828650.0,"predicted":38303732.0,"residPct":-11.7,"cps":2860.0,"score":0.431,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20230005","title":"Concreting of Demo Road, Sto. Domingo","muni":"Libon","year":2023,"awardee":"Synthetic Builders C","surface":"PCCP","thick":300.0,"length":1275.0,"width":6.7,"area":8542.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":173.0,"contract":31087014.0,"actual":26347160.0,"predicted":24774778.0,"residPct":6.3,"cps":3639.0,"score":0.449,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20240006","title":"Concreting of Demo Road, Guinobatan","muni":"Libon","year":2024,"awardee":"Synthetic Builders J","surface":"PCCP","thick":300.0,"length":1915.0,"width":7.3,"area":13980.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":339.0,"contract":56809282.0,"actual":47859547.0,"predicted":54688576.0,"residPct":-12.5,"cps":4064.0,"score":0.539,"flag":"NONE","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20200007","title":"Concreting of Demo Road, Libon","muni":"Sto. Domingo","year":2020,"awardee":"Synthetic Builders A","surface":"ASPHALT","thick":250.0,"length":460.0,"width":6.7,"area":3082.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":96.0,"contract":10521507.0,"actual":10376240.0,"predicted":5586520.0,"residPct":85.7,"cps":3414.0,"score":0.616,"flag":"HIGH","lof":true,"baseline":false,"ancillary":false,"injected":true,"why":"This project costs 86% more than the model expects for a road of this size, thickness, and year. A second method (LOF) independently agrees this is an outlier."},{"ref":"SYN-20190008","title":"Concreting of Demo Road, Guinobatan","muni":"Sto. Domingo","year":2019,"awardee":"Synthetic Builders F","surface":"ASPHALT","thick":300.0,"length":1347.0,"width":7.3,"area":9833.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":171.0,"contract":19351813.0,"actual":19351813.0,"predicted":22811316.0,"residPct":-15.2,"cps":1968.0,"score":0.562,"flag":"NONE","lof":true,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 15% less than expected, which is also unusual."},{"ref":"SYN-20200009","title":"Concreting of Demo Road, Legazpi City","muni":"Rapu-Rapu","year":2020,"awardee":"Synthetic Builders E","surface":"PCCP","thick":300.0,"length":1172.0,"width":7.3,"area":8556.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":207.0,"contract":27641682.0,"actual":27260042.0,"predicted":24663410.0,"residPct":10.5,"cps":3231.0,"score":0.48,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20200010","title":"Concreting of Demo Road, Camalig","muni":"Camalig","year":2020,"awardee":"Synthetic Builders F","surface":"PCCP","thick":230.0,"length":706.0,"width":7.3,"area":5154.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":125.0,"contract":19135777.0,"actual":18871575.0,"predicted":18020800.0,"residPct":4.7,"cps":3713.0,"score":0.505,"flag":"NONE","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20240011","title":"Concreting of Demo Road, Polangui","muni":"Sto. Domingo","year":2024,"awardee":"Synthetic Builders F","surface":"PCCP","thick":200.0,"length":2504.0,"width":6.7,"area":16777.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":310.0,"contract":42780414.0,"actual":36040787.0,"predicted":51135388.0,"residPct":-29.5,"cps":2550.0,"score":0.514,"flag":"NONE","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project costs 30% less than expected, which is also unusual; note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20240012","title":"Concreting of Demo Road, Rapu-Rapu","muni":"Malinao","year":2024,"awardee":"Synthetic Builders B","surface":"PCCP","thick":200.0,"length":1325.0,"width":6.7,"area":8878.0,"geomSrc":"PLANS_LXW","tier":"USABLE_PARTIAL","days":214.0,"contract":22917127.0,"actual":19306763.0,"predicted":18914980.0,"residPct":2.1,"cps":2581.0,"score":0.464,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20190013","title":"Concreting of Demo Road, Sto. Domingo","muni":"Manito","year":2019,"awardee":"Synthetic Builders D","surface":"PCCP","thick":200.0,"length":2943.0,"width":6.7,"area":19718.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":455.0,"contract":43872374.0,"actual":43872374.0,"predicted":55968724.0,"residPct":-21.6,"cps":2225.0,"score":0.598,"flag":"HIGH","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project costs 22% less than expected, which is also unusual; note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20210014","title":"Concreting of Demo Road, Ligao City","muni":"Tabaco City","year":2021,"awardee":"Synthetic Builders F","surface":"ASPHALT","thick":250.0,"length":1893.0,"width":7.3,"area":13819.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":189.0,"contract":42235719.0,"actual":40517766.0,"predicted":38386332.0,"residPct":5.6,"cps":3056.0,"score":0.593,"flag":"HIGH","lof":true,"baseline":false,"ancillary":true,"injected":false,"why":"This project note: the contract includes major non-road works, which can legitimately raise the total. A second method (LOF) independently agrees this is an outlier."},{"ref":"SYN-20230015","title":"Concreting of Demo Road, Camalig","muni":"Manito","year":2023,"awardee":"Synthetic Builders B","surface":"PCCP","thick":250.0,"length":1934.0,"width":6.1,"area":11797.0,"geomSrc":"BOQ_AREA","tier":"USABLE_PARTIAL","days":213.0,"contract":24850119.0,"actual":21061207.0,"predicted":24384024.0,"residPct":-13.6,"cps":2106.0,"score":0.425,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20190016","title":"Concreting of Demo Road, Camalig","muni":"Legazpi City","year":2019,"awardee":"Synthetic Builders I","surface":"PCCP","thick":230.0,"length":2023.0,"width":7.3,"area":14768.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":302.0,"contract":31657415.0,"actual":31657415.0,"predicted":29008546.0,"residPct":9.1,"cps":2144.0,"score":0.47,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20230017","title":"Concreting of Demo Road, Rapu-Rapu","muni":"Malinao","year":2023,"awardee":"Synthetic Builders I","surface":"PCCP","thick":230.0,"length":2126.0,"width":7.3,"area":15520.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":232.0,"contract":34903472.0,"actual":29581721.0,"predicted":31951496.0,"residPct":-7.4,"cps":2249.0,"score":0.456,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20190018","title":"Concreting of Demo Road, Guinobatan","muni":"Guinobatan","year":2019,"awardee":"Synthetic Builders F","surface":"PCCP","thick":280.0,"length":707.0,"width":6.1,"area":4313.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":125.0,"contract":26135144.0,"actual":26135144.0,"predicted":18896700.0,"residPct":38.3,"cps":6060.0,"score":0.55,"flag":"NONE","lof":false,"baseline":true,"ancillary":true,"injected":false,"why":"This project costs 38% more than the model expects for a road of this size, thickness, and year; its cost per square meter (PHP 6,060) is over 1.5x the dataset median (PHP 2,800); note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20210019","title":"Concreting of Demo Road, Tiwi","muni":"Tiwi","year":2021,"awardee":"Synthetic Builders I","surface":"PCCP","thick":230.0,"length":1489.0,"width":6.1,"area":9083.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":192.0,"contract":21085675.0,"actual":20228007.0,"predicted":24083852.0,"residPct":-16.0,"cps":2321.0,"score":0.446,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 16% less than expected, which is also unusual."},{"ref":"SYN-20230020","title":"Concreting of Demo Road, Tabaco City","muni":"Malinao","year":2023,"awardee":"Synthetic Builders E","surface":"PCCP","thick":300.0,"length":947.0,"width":6.7,"area":6345.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":102.0,"contract":35135911.0,"actual":29778719.0,"predicted":21902456.0,"residPct":36.0,"cps":5538.0,"score":0.502,"flag":"NONE","lof":false,"baseline":true,"ancillary":true,"injected":false,"why":"This project costs 36% more than the model expects for a road of this size, thickness, and year; its cost per square meter (PHP 5,538) is over 1.5x the dataset median (PHP 2,800); note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20200021","title":"Concreting of Demo Road, Legazpi City","muni":"Sto. Domingo","year":2020,"awardee":"Synthetic Builders F","surface":"PCCP","thick":200.0,"length":1387.0,"width":7.3,"area":10125.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":149.0,"contract":18859464.0,"actual":18599077.0,"predicted":21340502.0,"residPct":-12.8,"cps":1863.0,"score":0.485,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20210022","title":"Concreting of Demo Road, Guinobatan","muni":"Legazpi City","year":2021,"awardee":"Synthetic Builders E","surface":"PCCP","thick":300.0,"length":561.0,"width":5.0,"area":2805.0,"geomSrc":"PLANS_LXW","tier":"USABLE_PARTIAL","days":68.0,"contract":19432639.0,"actual":18642210.0,"predicted":14088428.0,"residPct":32.3,"cps":6928.0,"score":0.564,"flag":"NONE","lof":false,"baseline":true,"ancillary":true,"injected":false,"why":"This project costs 32% more than the model expects for a road of this size, thickness, and year; its cost per square meter (PHP 6,928) is over 1.5x the dataset median (PHP 2,800); note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20200023","title":"Concreting of Demo Road, Camalig","muni":"Tiwi","year":2020,"awardee":"Synthetic Builders B","surface":"PCCP","thick":250.0,"length":2913.0,"width":5.0,"area":14565.0,"geomSrc":"BOQ_AREA","tier":"USABLE_PARTIAL","days":326.0,"contract":30610905.0,"actual":30188269.0,"predicted":42170524.0,"residPct":-28.4,"cps":2102.0,"score":0.477,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 28% less than expected, which is also unusual."},{"ref":"SYN-20230024","title":"Concreting of Demo Road, Sto. Domingo","muni":"Rapu-Rapu","year":2023,"awardee":"Synthetic Builders B","surface":"PCCP","thick":230.0,"length":881.0,"width":5.0,"area":4405.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":104.0,"contract":19389862.0,"actual":16433479.0,"predicted":18944436.0,"residPct":-13.3,"cps":4402.0,"score":0.468,"flag":"NONE","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project its cost per square meter (PHP 4,402) is over 1.5x the dataset median (PHP 2,800); note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20200025","title":"Concreting of Demo Road, Polangui","muni":"Ligao City","year":2020,"awardee":"Synthetic Builders F","surface":"PCCP","thick":200.0,"length":2114.0,"width":6.1,"area":12895.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":309.0,"contract":53307411.0,"actual":52571411.0,"predicted":20939114.0,"residPct":151.1,"cps":4134.0,"score":0.6,"flag":"HIGH","lof":true,"baseline":false,"ancillary":false,"injected":true,"why":"This project costs 151% more than the model expects for a road of this size, thickness, and year. A second method (LOF) independently agrees this is an outlier."},{"ref":"SYN-20240026","title":"Concreting of Demo Road, Ligao City","muni":"Tiwi","year":2024,"awardee":"Synthetic Builders A","surface":"PCCP","thick":250.0,"length":1111.0,"width":5.0,"area":5555.0,"geomSrc":"BOQ_AREA","tier":"USABLE_PARTIAL","days":131.0,"contract":12716232.0,"actual":10712917.0,"predicted":14002439.0,"residPct":-23.5,"cps":2289.0,"score":0.453,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 23% less than expected, which is also unusual."},{"ref":"SYN-20210027","title":"Concreting of Demo Road, Legazpi City","muni":"Daraga","year":2021,"awardee":"Synthetic Builders G","surface":"PCCP","thick":250.0,"length":2660.0,"width":6.7,"area":17822.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":416.0,"contract":50946894.0,"actual":48874610.0,"predicted":57682220.0,"residPct":-15.3,"cps":2859.0,"score":0.502,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 15% less than expected, which is also unusual."},{"ref":"SYN-20210028","title":"Concreting of Demo Road, Tiwi","muni":"Ligao City","year":2021,"awardee":"Synthetic Builders D","surface":"PCCP","thick":200.0,"length":2088.0,"width":6.7,"area":13990.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":306.0,"contract":29725992.0,"actual":28516876.0,"predicted":43455476.0,"residPct":-34.4,"cps":2125.0,"score":0.464,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 34% less than expected, which is also unusual."},{"ref":"SYN-20220029","title":"Concreting of Demo Road, Tabaco City","muni":"Daraga","year":2022,"awardee":"Synthetic Builders E","surface":"PCCP","thick":200.0,"length":655.0,"width":7.3,"area":4782.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":95.0,"contract":15608463.0,"actual":13916247.0,"predicted":15581789.0,"residPct":-10.7,"cps":3264.0,"score":0.51,"flag":"NONE","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20220030","title":"Concreting of Demo Road, Oas","muni":"Daraga","year":2022,"awardee":"Synthetic Builders I","surface":"PCCP","thick":200.0,"length":2582.0,"width":6.7,"area":17299.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":379.0,"contract":34906834.0,"actual":31122355.0,"predicted":51172016.0,"residPct":-39.2,"cps":2018.0,"score":0.516,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 39% less than expected, which is also unusual."},{"ref":"SYN-20220031","title":"Concreting of Demo Road, Legazpi City","muni":"Libon","year":2022,"awardee":"Synthetic Builders I","surface":"PCCP","thick":280.0,"length":2851.0,"width":6.1,"area":17391.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":364.0,"contract":49338010.0,"actual":43988953.0,"predicted":57231412.0,"residPct":-23.1,"cps":2837.0,"score":0.51,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 23% less than expected, which is also unusual."},{"ref":"SYN-20220032","title":"Concreting of Demo Road, Oas","muni":"Manito","year":2022,"awardee":"Synthetic Builders E","surface":"PCCP","thick":200.0,"length":2741.0,"width":7.3,"area":20009.0,"geomSrc":"PLANS_LXW","tier":"USABLE_PARTIAL","days":264.0,"contract":42242032.0,"actual":37662297.0,"predicted":35578776.0,"residPct":5.9,"cps":2111.0,"score":0.502,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20240033","title":"Concreting of Demo Road, Tiwi","muni":"Manito","year":2024,"awardee":"Synthetic Builders D","surface":"PCCP","thick":200.0,"length":1838.0,"width":7.3,"area":13417.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":253.0,"contract":36764578.0,"actual":30972686.0,"predicted":38912796.0,"residPct":-20.4,"cps":2740.0,"score":0.493,"flag":"NONE","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project costs 20% less than expected, which is also unusual; note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20230034","title":"Concreting of Demo Road, Oas","muni":"Oas","year":2023,"awardee":"Synthetic Builders I","surface":"PCCP","thick":250.0,"length":693.0,"width":6.7,"area":4643.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":107.0,"contract":11694872.0,"actual":9911748.0,"predicted":10881806.0,"residPct":-8.9,"cps":2519.0,"score":0.426,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20230035","title":"Concreting of Demo Road, Guinobatan","muni":"Daraga","year":2023,"awardee":"Synthetic Builders F","surface":"PCCP","thick":230.0,"length":820.0,"width":6.7,"area":5494.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":142.0,"contract":24928995.0,"actual":21128057.0,"predicted":17602884.0,"residPct":20.0,"cps":4537.0,"score":0.49,"flag":"NONE","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project costs 20% more than the model expects for a road of this size, thickness, and year; its cost per square meter (PHP 4,537) is over 1.5x the dataset median (PHP 2,800); note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20230036","title":"Concreting of Demo Road, Manito","muni":"Manito","year":2023,"awardee":"Synthetic Builders H","surface":"PCCP","thick":250.0,"length":2805.0,"width":6.1,"area":17110.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":242.0,"contract":47592475.0,"actual":40336024.0,"predicted":50147620.0,"residPct":-19.6,"cps":2781.0,"score":0.49,"flag":"NONE","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project costs 20% less than expected, which is also unusual; note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20220037","title":"Concreting of Demo Road, Tiwi","muni":"Legazpi City","year":2022,"awardee":"Synthetic Builders B","surface":"PCCP","thick":300.0,"length":1791.0,"width":6.7,"area":12000.0,"geomSrc":"PLANS_LXW","tier":"USABLE_PARTIAL","days":189.0,"contract":38210894.0,"actual":34068201.0,"predicted":41032368.0,"residPct":-17.0,"cps":3184.0,"score":0.504,"flag":"NONE","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project costs 17% less than expected, which is also unusual; note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20210038","title":"Concreting of Demo Road, Rapu-Rapu","muni":"Tabaco City","year":2021,"awardee":"Synthetic Builders H","surface":"PCCP","thick":300.0,"length":787.0,"width":5.0,"area":3935.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":87.0,"contract":12067817.0,"actual":11576954.0,"predicted":13212748.0,"residPct":-12.4,"cps":3067.0,"score":0.456,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20240039","title":"Concreting of Demo Road, Ligao City","muni":"Tabaco City","year":2024,"awardee":"Synthetic Builders F","surface":"PCCP","thick":250.0,"length":2687.0,"width":6.7,"area":18003.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":277.0,"contract":67673246.0,"actual":57012001.0,"predicted":49694924.0,"residPct":14.7,"cps":3759.0,"score":0.502,"flag":"NONE","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20210040","title":"Concreting of Demo Road, Libon","muni":"Oas","year":2021,"awardee":"Synthetic Builders C","surface":"PCCP","thick":280.0,"length":2032.0,"width":7.3,"area":14834.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":330.0,"contract":86003591.0,"actual":82505364.0,"predicted":43952512.0,"residPct":87.7,"cps":5798.0,"score":0.576,"flag":"MODERATE","lof":false,"baseline":true,"ancillary":true,"injected":true,"why":"This project costs 88% more than the model expects for a road of this size, thickness, and year; its cost per square meter (PHP 5,798) is over 1.5x the dataset median (PHP 2,800); note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20200041","title":"Concreting of Demo Road, Polangui","muni":"Daraga","year":2020,"awardee":"Synthetic Builders H","surface":"ASPHALT","thick":300.0,"length":1838.0,"width":7.3,"area":13417.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":267.0,"contract":30006464.0,"actual":29592174.0,"predicted":33105666.0,"residPct":-10.6,"cps":2236.0,"score":0.569,"flag":"NONE","lof":true,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20240042","title":"Concreting of Demo Road, Manito","muni":"Rapu-Rapu","year":2024,"awardee":"Synthetic Builders F","surface":"PCCP","thick":250.0,"length":1316.0,"width":6.1,"area":8028.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":143.0,"contract":21213269.0,"actual":17871330.0,"predicted":20978738.0,"residPct":-14.8,"cps":2643.0,"score":0.429,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20190043","title":"Concreting of Demo Road, Sto. Domingo","muni":"Sto. Domingo","year":2019,"awardee":"Synthetic Builders H","surface":"PCCP","thick":280.0,"length":1410.0,"width":6.1,"area":8601.0,"geomSrc":"PLANS_LXW","tier":"USABLE_PARTIAL","days":128.0,"contract":31418124.0,"actual":31418124.0,"predicted":36547692.0,"residPct":-14.0,"cps":3653.0,"score":0.523,"flag":"NONE","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20240044","title":"Concreting of Demo Road, Tiwi","muni":"Manito","year":2024,"awardee":"Synthetic Builders I","surface":"PCCP","thick":230.0,"length":947.0,"width":6.7,"area":6345.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":108.0,"contract":17927761.0,"actual":15103421.0,"predicted":15863629.0,"residPct":-4.8,"cps":2826.0,"score":0.44,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20220045","title":"Concreting of Demo Road, Manito","muni":"Malinao","year":2022,"awardee":"Synthetic Builders C","surface":"PCCP","thick":280.0,"length":403.0,"width":6.1,"area":2458.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":63.0,"contract":6933022.0,"actual":6181368.0,"predicted":5825582.0,"residPct":6.1,"cps":2820.0,"score":0.466,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20190046","title":"Concreting of Demo Road, Tabaco City","muni":"Tabaco City","year":2019,"awardee":"Synthetic Builders I","surface":"PCCP","thick":230.0,"length":2666.0,"width":6.7,"area":17862.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":291.0,"contract":45814656.0,"actual":45814656.0,"predicted":38712488.0,"residPct":18.3,"cps":2565.0,"score":0.499,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 18% more than the model expects for a road of this size, thickness, and year."},{"ref":"SYN-20190047","title":"Concreting of Demo Road, Rapu-Rapu","muni":"Guinobatan","year":2019,"awardee":"Synthetic Builders J","surface":"PCCP","thick":200.0,"length":1563.0,"width":5.0,"area":7815.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":201.0,"contract":13879129.0,"actual":13879129.0,"predicted":18635436.0,"residPct":-25.5,"cps":1776.0,"score":0.484,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 26% less than expected, which is also unusual."},{"ref":"SYN-20210048","title":"Concreting of Demo Road, Rapu-Rapu","muni":"Daraga","year":2021,"awardee":"Synthetic Builders F","surface":"ASPHALT","thick":280.0,"length":1779.0,"width":5.0,"area":8895.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":135.0,"contract":19943704.0,"actual":19132487.0,"predicted":22056588.0,"residPct":-13.3,"cps":2242.0,"score":0.525,"flag":"NONE","lof":true,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20190049","title":"Concreting of Demo Road, Camalig","muni":"Camalig","year":2019,"awardee":"Synthetic Builders H","surface":"PCCP","thick":250.0,"length":1170.0,"width":5.0,"area":5850.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":152.0,"contract":13724494.0,"actual":13724494.0,"predicted":17865716.0,"residPct":-23.2,"cps":2346.0,"score":0.454,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 23% less than expected, which is also unusual."},{"ref":"SYN-20190050","title":"Concreting of Demo Road, Oas","muni":"Polangui","year":2019,"awardee":"Synthetic Builders H","surface":"PCCP","thick":230.0,"length":2329.0,"width":6.1,"area":14207.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":310.0,"contract":29090531.0,"actual":29090531.0,"predicted":28511732.0,"residPct":2.0,"cps":2048.0,"score":0.456,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20220051","title":"Concreting of Demo Road, Camalig","muni":"Sto. Domingo","year":2022,"awardee":"Synthetic Builders E","surface":"PCCP","thick":200.0,"length":368.0,"width":5.0,"area":1840.0,"geomSrc":"PLANS_LXW","tier":"USABLE_PARTIAL","days":54.0,"contract":4140032.0,"actual":3691184.0,"predicted":6610880.0,"residPct":-44.2,"cps":2250.0,"score":0.559,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 44% less than expected, which is also unusual."},{"ref":"SYN-20240052","title":"Concreting of Demo Road, Polangui","muni":"Rapu-Rapu","year":2024,"awardee":"Synthetic Builders I","surface":"PCCP","thick":230.0,"length":1305.0,"width":6.1,"area":7960.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":128.0,"contract":20335108.0,"actual":17131514.0,"predicted":15445547.0,"residPct":10.9,"cps":2555.0,"score":0.476,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20210053","title":"Concreting of Demo Road, Manito","muni":"Polangui","year":2021,"awardee":"Synthetic Builders E","surface":"PCCP","thick":300.0,"length":382.0,"width":7.3,"area":2789.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":65.0,"contract":9127663.0,"actual":8756392.0,"predicted":10797372.0,"residPct":-18.9,"cps":3273.0,"score":0.48,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 19% less than expected, which is also unusual."},{"ref":"SYN-20230054","title":"Concreting of Demo Road, Oas","muni":"Guinobatan","year":2023,"awardee":"Synthetic Builders I","surface":"PCCP","thick":250.0,"length":632.0,"width":7.3,"area":4614.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":101.0,"contract":17219710.0,"actual":14594211.0,"predicted":16313802.0,"residPct":-10.5,"cps":3732.0,"score":0.46,"flag":"NONE","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20240055","title":"Concreting of Demo Road, Ligao City","muni":"Ligao City","year":2024,"awardee":"Synthetic Builders H","surface":"PCCP","thick":300.0,"length":2911.0,"width":7.3,"area":21250.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":431.0,"contract":69596436.0,"actual":58632212.0,"predicted":49164164.0,"residPct":19.3,"cps":3275.0,"score":0.593,"flag":"HIGH","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project costs 19% more than the model expects for a road of this size, thickness, and year; note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20230056","title":"Concreting of Demo Road, Malinao","muni":"Oas","year":2023,"awardee":"Synthetic Builders F","surface":"PCCP","thick":300.0,"length":2076.0,"width":6.7,"area":13909.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":329.0,"contract":51602917.0,"actual":43734992.0,"predicted":44204372.0,"residPct":-1.1,"cps":3710.0,"score":0.5,"flag":"NONE","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20220057","title":"Concreting of Demo Road, Libon","muni":"Guinobatan","year":2022,"awardee":"Synthetic Builders B","surface":"PCCP","thick":300.0,"length":1456.0,"width":5.0,"area":7280.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":117.0,"contract":23288554.0,"actual":20763690.0,"predicted":17705436.0,"residPct":17.3,"cps":3199.0,"score":0.447,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 17% more than the model expects for a road of this size, thickness, and year."},{"ref":"SYN-20210058","title":"Concreting of Demo Road, Malinao","muni":"Rapu-Rapu","year":2021,"awardee":"Synthetic Builders I","surface":"PCCP","thick":200.0,"length":1714.0,"width":6.7,"area":11484.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":159.0,"contract":25965467.0,"actual":24909312.0,"predicted":23878810.0,"residPct":4.3,"cps":2261.0,"score":0.45,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20220059","title":"Concreting of Demo Road, Ligao City","muni":"Camalig","year":2022,"awardee":"Synthetic Builders G","surface":"PCCP","thick":200.0,"length":2657.0,"width":6.7,"area":17802.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":348.0,"contract":71715204.0,"actual":63940089.0,"predicted":40430772.0,"residPct":58.1,"cps":4029.0,"score":0.558,"flag":"NONE","lof":false,"baseline":false,"ancillary":true,"injected":true,"why":"This project costs 58% more than the model expects for a road of this size, thickness, and year; note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20200060","title":"Concreting of Demo Road, Oas","muni":"Polangui","year":2020,"awardee":"Synthetic Builders F","surface":"PCCP","thick":250.0,"length":1229.0,"width":7.3,"area":8972.0,"geomSrc":"PLANS_LXW","tier":"USABLE_PARTIAL","days":137.0,"contract":22198226.0,"actual":21891741.0,"predicted":19402102.0,"residPct":12.8,"cps":2474.0,"score":0.424,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20210061","title":"Concreting of Demo Road, Oas","muni":"Manito","year":2021,"awardee":"Synthetic Builders H","surface":"PCCP","thick":230.0,"length":1894.0,"width":6.1,"area":11553.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":213.0,"contract":31670186.0,"actual":30381990.0,"predicted":34890628.0,"residPct":-12.9,"cps":2741.0,"score":0.474,"flag":"NONE","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20210062","title":"Concreting of Demo Road, Malinao","muni":"Rapu-Rapu","year":2021,"awardee":"Synthetic Builders J","surface":"PCCP","thick":300.0,"length":2146.0,"width":5.0,"area":10730.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":212.0,"contract":35291488.0,"actual":33855994.0,"predicted":25917370.0,"residPct":30.6,"cps":3289.0,"score":0.454,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 31% more than the model expects for a road of this size, thickness, and year."},{"ref":"SYN-20200063","title":"Concreting of Demo Road, Ligao City","muni":"Tabaco City","year":2020,"awardee":"Synthetic Builders F","surface":"PCCP","thick":230.0,"length":1260.0,"width":6.7,"area":8442.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":155.0,"contract":17314763.0,"actual":17075703.0,"predicted":22424792.0,"residPct":-23.9,"cps":2051.0,"score":0.435,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 24% less than expected, which is also unusual."},{"ref":"SYN-20240064","title":"Concreting of Demo Road, Tiwi","muni":"Camalig","year":2024,"awardee":"Synthetic Builders D","surface":"ASPHALT","thick":200.0,"length":1702.0,"width":6.1,"area":10382.0,"geomSrc":"PLANS_LXW","tier":"USABLE_PARTIAL","days":259.0,"contract":14663598.0,"actual":12353495.0,"predicted":22298956.0,"residPct":-44.6,"cps":1412.0,"score":0.589,"flag":"MODERATE","lof":true,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 45% less than expected, which is also unusual. A second method (LOF) independently agrees this is an outlier."},{"ref":"SYN-20190065","title":"Concreting of Demo Road, Malinao","muni":"Oas","year":2019,"awardee":"Synthetic Builders I","surface":"PCCP","thick":200.0,"length":2366.0,"width":6.7,"area":15852.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":274.0,"contract":36492206.0,"actual":36492206.0,"predicted":41396396.0,"residPct":-11.8,"cps":2302.0,"score":0.532,"flag":"NONE","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20190066","title":"Concreting of Demo Road, Sto. Domingo","muni":"Guinobatan","year":2019,"awardee":"Synthetic Builders G","surface":"PCCP","thick":230.0,"length":2755.0,"width":6.1,"area":16806.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":341.0,"contract":41444776.0,"actual":41444776.0,"predicted":46736800.0,"residPct":-11.3,"cps":2466.0,"score":0.495,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20200067","title":"Concreting of Demo Road, Manito","muni":"Ligao City","year":2020,"awardee":"Synthetic Builders E","surface":"PCCP","thick":280.0,"length":708.0,"width":6.1,"area":4319.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":86.0,"contract":10316368.0,"actual":10173933.0,"predicted":11610925.0,"residPct":-12.4,"cps":2389.0,"score":0.455,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20240068","title":"Concreting of Demo Road, Malinao","muni":"Malinao","year":2024,"awardee":"Synthetic Builders B","surface":"PCCP","thick":200.0,"length":2820.0,"width":5.0,"area":14100.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":239.0,"contract":38935786.0,"actual":32801841.0,"predicted":30427616.0,"residPct":7.8,"cps":2761.0,"score":0.49,"flag":"NONE","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20230069","title":"Concreting of Demo Road, Legazpi City","muni":"Manito","year":2023,"awardee":"Synthetic Builders E","surface":"PCCP","thick":280.0,"length":314.0,"width":7.3,"area":2292.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":57.0,"contract":14396633.0,"actual":12201571.0,"predicted":18185632.0,"residPct":-32.9,"cps":6281.0,"score":0.535,"flag":"NONE","lof":false,"baseline":true,"ancillary":true,"injected":false,"why":"This project costs 33% less than expected, which is also unusual; its cost per square meter (PHP 6,281) is over 1.5x the dataset median (PHP 2,800); note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20240070","title":"Concreting of Demo Road, Tabaco City","muni":"Camalig","year":2024,"awardee":"Synthetic Builders J","surface":"ASPHALT","thick":230.0,"length":2333.0,"width":7.3,"area":17031.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":230.0,"contract":29599364.0,"actual":24936280.0,"predicted":26098820.0,"residPct":-4.5,"cps":1738.0,"score":0.557,"flag":"NONE","lof":true,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20200071","title":"Concreting of Demo Road, Libon","muni":"Guinobatan","year":2020,"awardee":"Synthetic Builders C","surface":"ASPHALT","thick":230.0,"length":2488.0,"width":6.1,"area":15177.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":286.0,"contract":27018376.0,"actual":26645341.0,"predicted":43267440.0,"residPct":-38.4,"cps":1780.0,"score":0.593,"flag":"MODERATE","lof":true,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 38% less than expected, which is also unusual. A second method (LOF) independently agrees this is an outlier."},{"ref":"SYN-20230072","title":"Concreting of Demo Road, Polangui","muni":"Oas","year":2023,"awardee":"Synthetic Builders J","surface":"PCCP","thick":280.0,"length":669.0,"width":5.0,"area":3345.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":88.0,"contract":9455113.0,"actual":8013487.0,"predicted":8833426.0,"residPct":-9.3,"cps":2827.0,"score":0.446,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20210073","title":"Concreting of Demo Road, Tiwi","muni":"Tiwi","year":2021,"awardee":"Synthetic Builders J","surface":"PCCP","thick":300.0,"length":1431.0,"width":6.7,"area":9588.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":140.0,"contract":27488796.0,"actual":26370679.0,"predicted":23939774.0,"residPct":10.2,"cps":2867.0,"score":0.442,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20210074","title":"Concreting of Demo Road, Camalig","muni":"Ligao City","year":2021,"awardee":"Synthetic Builders I","surface":"PCCP","thick":250.0,"length":2501.0,"width":6.1,"area":15256.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":255.0,"contract":67104707.0,"actual":64375199.0,"predicted":39372292.0,"residPct":63.5,"cps":4399.0,"score":0.488,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":true,"why":"This project costs 64% more than the model expects for a road of this size, thickness, and year; its cost per square meter (PHP 4,399) is over 1.5x the dataset median (PHP 2,800)."},{"ref":"SYN-20190075","title":"Concreting of Demo Road, Guinobatan","muni":"Manito","year":2019,"awardee":"Synthetic Builders D","surface":"PCCP","thick":280.0,"length":339.0,"width":6.7,"area":2271.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":76.0,"contract":5660987.0,"actual":5660987.0,"predicted":9741931.0,"residPct":-41.9,"cps":2492.0,"score":0.52,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 42% less than expected, which is also unusual."},{"ref":"SYN-20220076","title":"Concreting of Demo Road, Rapu-Rapu","muni":"Malinao","year":2022,"awardee":"Synthetic Builders H","surface":"PCCP","thick":230.0,"length":1997.0,"width":5.0,"area":9985.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":242.0,"contract":25439280.0,"actual":22681241.0,"predicted":19326950.0,"residPct":17.4,"cps":2548.0,"score":0.438,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 17% more than the model expects for a road of this size, thickness, and year."},{"ref":"SYN-20230077","title":"Concreting of Demo Road, Ligao City","muni":"Polangui","year":2023,"awardee":"Synthetic Builders G","surface":"PCCP","thick":200.0,"length":2441.0,"width":5.0,"area":12205.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":166.0,"contract":24241369.0,"actual":20545274.0,"predicted":28989734.0,"residPct":-29.1,"cps":1986.0,"score":0.458,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 29% less than expected, which is also unusual."},{"ref":"SYN-20220078","title":"Concreting of Demo Road, Libon","muni":"Libon","year":2022,"awardee":"Synthetic Builders I","surface":"PCCP","thick":300.0,"length":1685.0,"width":6.7,"area":11290.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":189.0,"contract":31826360.0,"actual":28375856.0,"predicted":27304268.0,"residPct":3.9,"cps":2819.0,"score":0.456,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20190079","title":"Concreting of Demo Road, Legazpi City","muni":"Daraga","year":2019,"awardee":"Synthetic Builders E","surface":"PCCP","thick":280.0,"length":2260.0,"width":5.0,"area":11300.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":268.0,"contract":25281053.0,"actual":25281053.0,"predicted":31644084.0,"residPct":-20.1,"cps":2237.0,"score":0.477,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 20% less than expected, which is also unusual."},{"ref":"SYN-20220080","title":"Concreting of Demo Road, Tiwi","muni":"Libon","year":2022,"awardee":"Synthetic Builders G","surface":"PCCP","thick":250.0,"length":911.0,"width":6.7,"area":6104.0,"geomSrc":"BOQ_AREA","tier":"USABLE_PARTIAL","days":120.0,"contract":27404123.0,"actual":24433063.0,"predicted":24909870.0,"residPct":-1.9,"cps":4490.0,"score":0.489,"flag":"NONE","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project its cost per square meter (PHP 4,490) is over 1.5x the dataset median (PHP 2,800); note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20200081","title":"Concreting of Demo Road, Tabaco City","muni":"Daraga","year":2020,"awardee":"Synthetic Builders J","surface":"PCCP","thick":300.0,"length":836.0,"width":6.1,"area":5100.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":105.0,"contract":14721778.0,"actual":14518519.0,"predicted":15166635.0,"residPct":-4.3,"cps":2887.0,"score":0.493,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20240082","title":"Concreting of Demo Road, Guinobatan","muni":"Legazpi City","year":2024,"awardee":"Synthetic Builders J","surface":"PCCP","thick":250.0,"length":1280.0,"width":5.0,"area":6400.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":129.0,"contract":32128030.0,"actual":27066580.0,"predicted":24765184.0,"residPct":9.3,"cps":5020.0,"score":0.487,"flag":"NONE","lof":false,"baseline":true,"ancillary":true,"injected":false,"why":"This project its cost per square meter (PHP 5,020) is over 1.5x the dataset median (PHP 2,800); note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20240083","title":"Concreting of Demo Road, Malinao","muni":"Rapu-Rapu","year":2024,"awardee":"Synthetic Builders J","surface":"PCCP","thick":200.0,"length":784.0,"width":7.3,"area":5723.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":95.0,"contract":12871512.0,"actual":10843734.0,"predicted":8429425.0,"residPct":28.6,"cps":2249.0,"score":0.513,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 29% more than the model expects for a road of this size, thickness, and year."},{"ref":"SYN-20200084","title":"Concreting of Demo Road, Legazpi City","muni":"Tabaco City","year":2020,"awardee":"Synthetic Builders B","surface":"PCCP","thick":250.0,"length":1234.0,"width":6.7,"area":8268.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":124.0,"contract":20868374.0,"actual":20580250.0,"predicted":16748109.0,"residPct":22.9,"cps":2524.0,"score":0.447,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 23% more than the model expects for a road of this size, thickness, and year."},{"ref":"SYN-20220085","title":"Concreting of Demo Road, Daraga","muni":"Legazpi City","year":2022,"awardee":"Synthetic Builders A","surface":"PCCP","thick":250.0,"length":2860.0,"width":7.3,"area":20878.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":442.0,"contract":55644247.0,"actual":49611490.0,"predicted":44899004.0,"residPct":10.5,"cps":2665.0,"score":0.573,"flag":"MODERATE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20240086","title":"Concreting of Demo Road, Malinao","muni":"Polangui","year":2024,"awardee":"Synthetic Builders A","surface":"PCCP","thick":230.0,"length":1848.0,"width":7.3,"area":13490.0,"geomSrc":"PLANS_LXW","tier":"USABLE_PARTIAL","days":290.0,"contract":42357915.0,"actual":35684848.0,"predicted":27490188.0,"residPct":29.8,"cps":3140.0,"score":0.475,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project costs 30% more than the model expects for a road of this size, thickness, and year."},{"ref":"SYN-20240087","title":"Concreting of Demo Road, Polangui","muni":"Ligao City","year":2024,"awardee":"Synthetic Builders J","surface":"PCCP","thick":280.0,"length":1218.0,"width":6.7,"area":8161.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":159.0,"contract":62482522.0,"actual":52639025.0,"predicted":28149058.0,"residPct":87.0,"cps":7657.0,"score":0.557,"flag":"NONE","lof":false,"baseline":true,"ancillary":true,"injected":true,"why":"This project costs 87% more than the model expects for a road of this size, thickness, and year; its cost per square meter (PHP 7,657) is over 1.5x the dataset median (PHP 2,800); note: the contract includes major non-road works, which can legitimately raise the total."},{"ref":"SYN-20230088","title":"Concreting of Demo Road, Legazpi City","muni":"Guinobatan","year":2023,"awardee":"Synthetic Builders E","surface":"PCCP","thick":230.0,"length":1033.0,"width":7.3,"area":7541.0,"geomSrc":"PLANS_LXW","tier":"USABLE_PARTIAL","days":121.0,"contract":16243791.0,"actual":13767091.0,"predicted":13607418.0,"residPct":1.2,"cps":2154.0,"score":0.476,"flag":"NONE","lof":false,"baseline":false,"ancillary":false,"injected":false,"why":"This project its combination of size, duration, and cost is rare in the dataset, even though no single value is extreme."},{"ref":"SYN-20220089","title":"Concreting of Demo Road, Rapu-Rapu","muni":"Rapu-Rapu","year":2022,"awardee":"Synthetic Builders G","surface":"PCCP","thick":280.0,"length":2871.0,"width":5.0,"area":14355.0,"geomSrc":"BOQ_AREA","tier":"COMPLETE","days":226.0,"contract":48877260.0,"actual":43578156.0,"predicted":43459524.0,"residPct":0.3,"cps":3405.0,"score":0.481,"flag":"NONE","lof":false,"baseline":false,"ancillary":true,"injected":false,"why":"This project note: the contract includes major non-road works, which can legitimately raise the total."}],"metrics":{"n_projects":90,"flags_high":5,"flags_moderate":4,"mlr":{"cv_mae_mean":4677012.059061817,"cv_rmse_mean":7244037.903591642,"cv_r2_mean":0.7579718715104931},"mlr_coefficients":{"geometry_sqm":1932.575257010077,"surface_thickness_mm":90131.05720857883,"duration_days":28249.675680914388,"publish_year":-314469.2944007599,"scope_flag_ancillary":9748058.528751153,"surface_is_pccp":5919862.71485926},"xgboost":{"cv_mae_mean":6028531.1534526255,"cv_rmse_mean":8810823.989012912,"cv_r2_mean":0.6253603076212426},"xgboost_feature_importances":{"geometry_sqm":0.2987358868122101,"surface_thickness_mm":0.10380049049854279,"duration_days":0.204933300614357,"publish_year":0.04670136794447899,"scope_flag_ancillary":0.24478068947792053,"surface_is_pccp":0.10104828327894211},"synthetic_check":{"injected":6,"caught":3,"false_flags":6},"median_cps":2800.294640087773,"n_lof":9,"n_baseline":8}};
+(function () {
+  const P = DATA.projects, M = DATA.metrics;
+  const $ = (s, el = document) => el.querySelector(s);
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const fmtM = v => (v / 1e6).toFixed(1);
+  const fmtN = v => v == null ? "—" : Math.round(v).toLocaleString("en-US");
+  const fmtPct = v => (v > 0 ? "+" : "") + v.toFixed(0) + "%";
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const flagLabel = { HIGH: "High", MODERATE: "Moderate", NONE: "None" };
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- stats ---------- */
+  const sc = M.synthetic_check;
+  const stats = [
+    { v: M.n_projects, l: "Projects screened", s: "synthetic sample" },
+    { v: M.flags_high, l: "High flags", s: "top 5% most isolated", c: "high" },
+    { v: M.flags_moderate, l: "Moderate flags", s: "next 5%", c: "mod" },
+    sc ? { v: `${sc.caught}/${sc.injected}`, l: "Planted anomalies caught", s: `${sc.false_flags} flags on normal projects` }
+       : { v: M.n_lof, l: "LOF outliers", s: "second method" },
+  ];
+  $("#stats").innerHTML = stats.map(x => `<div class="stat"><div class="label">${x.l}</div><div class="v ${x.c || ""}">${x.v}</div><div class="s">${x.s}</div></div>`).join("");
+
+  /* ---------- explorer state ---------- */
+  const state = { filter: "FLAGGED", muni: "", q: "", sortK: "score", sortDir: -1, sel: null };
+  const munis = [...new Set(P.map(p => p.muni))].sort();
+  $("#muni").insertAdjacentHTML("beforeend", munis.map(m => `<option>${esc(m)}</option>`).join(""));
+  const top = P.slice().sort((a, b) => b.score - a.score)[0];
+  state.sel = top.ref;
+
+  function visible() {
+    return P.filter(p =>
+      (state.filter === "ALL" || (state.filter === "FLAGGED" ? p.flag !== "NONE" : p.flag === state.filter)) &&
+      (!state.muni || p.muni === state.muni) &&
+      (!state.q || (p.ref + " " + p.title).toLowerCase().includes(state.q))
+    ).sort((a, b) => {
+      const x = a[state.sortK], y = b[state.sortK];
+      return (typeof x === "string" ? x.localeCompare(y) : x - y) * state.sortDir;
+    });
+  }
+
+  function renderTable() {
+    const rows = visible();
+    $("#tbl tbody").innerHTML = rows.map(p => `
+      <tr data-ref="${p.ref}" tabindex="0" aria-selected="${p.ref === state.sel}">
+        <td class="num">${p.ref}</td>
+        <td>${esc(p.muni)}</td>
+        <td class="num r">${fmtN(p.area)}</td>
+        <td class="num r">${fmtM(p.actual)}</td>
+        <td class="num r ${p.residPct >= 15 ? "pos" : ""}">${fmtPct(p.residPct)}</td>
+        <td><span class="chip ${p.flag}">${flagLabel[p.flag]}</span></td>
+      </tr>`).join("") || `<tr><td colspan="6" style="color:var(--muted);padding:16px">No projects match these filters.</td></tr>`;
+    $("#count").textContent = `${rows.length} of ${P.length} projects shown. Sorted by ${state.sortK === "score" ? "anomaly score" : state.sortK}.`;
+  }
+
+  function select(ref, scroll) {
+    state.sel = ref;
+    document.querySelectorAll("#tbl tbody tr").forEach(tr => tr.setAttribute("aria-selected", tr.dataset.ref === ref));
+    renderDetail();
+    renderScatter();
+    if (scroll) $("#explorer").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+  }
+
+  document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
+    state.filter = b.dataset.f;
+    document.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-pressed", x === b));
+    renderTable();
+  }));
+  $("#muni").addEventListener("change", e => { state.muni = e.target.value; renderTable(); });
+  $("#q").addEventListener("input", e => { state.q = e.target.value.trim().toLowerCase(); renderTable(); });
+  document.querySelectorAll("th button").forEach(b => b.addEventListener("click", () => {
+    const k = b.dataset.k;
+    state.sortDir = state.sortK === k ? -state.sortDir : (typeof P[0][k] === "string" ? 1 : -1);
+    state.sortK = k;
+    renderTable();
+  }));
+  $("#tbl tbody").addEventListener("click", e => { const tr = e.target.closest("tr[data-ref]"); if (tr) select(tr.dataset.ref); });
+  $("#tbl tbody").addEventListener("keydown", e => {
+    const tr = e.target.closest("tr[data-ref]"); if (!tr) return;
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(tr.dataset.ref); }
+    if (e.key === "ArrowDown" && tr.nextElementSibling) { e.preventDefault(); tr.nextElementSibling.focus(); select(tr.nextElementSibling.dataset.ref); }
+    if (e.key === "ArrowUp" && tr.previousElementSibling) { e.preventDefault(); tr.previousElementSibling.focus(); select(tr.previousElementSibling.dataset.ref); }
+  });
+
+  /* ---------- detail ---------- */
+  const maxActual = Math.max(...P.map(p => Math.max(p.actual, p.predicted)));
+  function renderDetail() {
+    const p = P.find(x => x.ref === state.sel);
+    const bar = (lbl, v, col) => `<div class="bar-row"><span class="label">${lbl}</span><div class="bar-track"><div class="bar-fill" style="width:${(v / maxActual * 100).toFixed(1)}%;background:${col}"></div></div><span class="num" style="text-align:right">₱${fmtM(v)}M</span></div>`;
+    const sig = (on, t) => `<span class="${on ? "on" : ""}">${on ? "✓" : "–"} ${t}</span>`;
+    $("#detail").innerHTML = `
+      <div style="display:flex;justify-content:space-between;gap:12px;align-items:start">
+        <div style="min-width:0"><div class="ref">${p.ref} · ${p.year}</div><h3>${esc(p.title)}</h3></div>
+        <span class="chip ${p.flag}">${flagLabel[p.flag]} flag</span>
+      </div>
+      <div class="viewer"><canvas id="road" aria-label="3D model of the road slab, ${p.length} m by ${p.width} m by ${p.thick} mm"></canvas><span class="hint">Drag to rotate · proportions scaled across all projects</span></div>
+      <div class="cmp">
+        ${bar("Expected", p.predicted, "var(--none)")}
+        ${bar("Actual", p.actual, p.flag === "HIGH" ? "var(--high)" : p.flag === "MODERATE" ? "var(--mod)" : "var(--ink)")}
+      </div>
+      <p class="why ${p.flag}">${esc(p.why)}</p>
+      <dl class="facts">
+        <div><dt>Municipality</dt><dd>${esc(p.muni)}</dd></div>
+        <div><dt>Surface</dt><dd>${p.surface} ${p.thick} mm</dd></div>
+        <div><dt>Paving area</dt><dd>${fmtN(p.area)} m²</dd></div>
+        <div><dt>Length × width</dt><dd>${fmtN(p.length)} × ${p.width} m</dd></div>
+        <div><dt>Cost per m²</dt><dd>₱${fmtN(p.cps)}</dd></div>
+        <div><dt>Duration</dt><dd>${fmtN(p.days)} days</dd></div>
+        <div><dt>Awardee</dt><dd>${esc(p.awardee)}</dd></div>
+        <div><dt>Data tier</dt><dd>${p.tier}</dd></div>
+        <div><dt>Anomaly score</dt><dd>${p.score.toFixed(3)}</dd></div>
+      </dl>
+      <div class="signals">
+        ${sig(p.flag !== "NONE", "Isolation Forest")}
+        ${sig(p.lof, "LOF agrees")}
+        ${sig(p.baseline, "Cost/m² rule")}
+        ${sig(p.ancillary, "Includes non-road works")}
+        ${p.injected != null ? sig(p.injected, "Planted anomaly") : ""}
+      </div>`;
+    road.setProject(p, $("#road"));
+  }
+
+  /* ---------- parametric 3D road slab (canvas, orthographic) ---------- */
+  const maxL = Math.max(...P.map(p => p.length || 0));
+  const maxW = Math.max(...P.map(p => p.width || 0));
+  const maxT = Math.max(...P.map(p => p.thick || 0));
+  const road = (() => {
+    let cvs, ctx, proj, yaw = -0.62, pitch = 0.5, drag = null, raf = 0, idle = true;
+    function setProject(p, c) {
+      cvs = c; ctx = c.getContext("2d"); proj = p;
+      // One scale for every project, so roads can be compared with each other.
+      // Width and thickness are exaggerated (same factor for all) so the slab is visible.
+      proj.dim = { X: 3.2 * p.length / maxL, Y: 0.9 * p.width / maxW, Z: 0.32 * p.thick / maxT };
+      c.onpointerdown = e => { drag = { x: e.clientX, y: e.clientY, yaw, pitch }; idle = false; c.setPointerCapture(e.pointerId); };
+      c.onpointermove = e => { if (!drag) return; yaw = drag.yaw + (e.clientX - drag.x) * 0.01; pitch = Math.max(0.08, Math.min(1.35, drag.pitch + (e.clientY - drag.y) * 0.008)); draw(); };
+      c.onpointerup = c.onpointercancel = () => { drag = null; };
+      draw();
+      cancelAnimationFrame(raf);
+      if (!reduceMotion) { idle = true; const spin = () => { if (idle && cvs === c && document.body.contains(c)) { yaw += 0.0025; draw(); raf = requestAnimationFrame(spin); } }; raf = requestAnimationFrame(spin); }
+    }
+    function draw() {
+      if (!cvs) return;
+      const dpr = devicePixelRatio || 1, w = cvs.clientWidth, h = cvs.clientHeight;
+      if (cvs.width !== w * dpr) { cvs.width = w * dpr; cvs.height = h * dpr; }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+      const { X, Y, Z } = proj.dim;
+      const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
+      const s = Math.min(w / 3.9, h / 1.6);
+      const P3 = (x, y, z) => { x -= X / 2; y -= Y / 2; const rx = x * cy - y * sy, ry = x * sy + y * cy; return { x: w / 2 + rx * s, y: h * 0.56 + (ry * sp - z * cp) * s, d: ry * cp + z * sp }; };
+      // ground grid, 4 x 2 units
+      ctx.strokeStyle = css("--rule"); ctx.lineWidth = 1;
+      for (let i = -2; i <= 2; i += 0.5) { const a = P3(i + X / 2, -1 + Y / 2, 0), b = P3(i + X / 2, 1 + Y / 2, 0); ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+      for (let j = -1; j <= 1; j += 0.5) { const a = P3(-2 + X / 2, j + Y / 2, 0), b = P3(2 + X / 2, j + Y / 2, 0); ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+      const v = [[0,0,0],[X,0,0],[X,Y,0],[0,Y,0],[0,0,Z],[X,0,Z],[X,Y,Z],[0,Y,Z]].map(q => P3(...q));
+      const faces = [[[4,5,6,7], .0], [[0,1,5,4], .18], [[1,2,6,5], .3], [[2,3,7,6], .18], [[3,0,4,7], .3]];
+      const base = proj.surface === "ASPHALT" ? css("--asphalt") : css("--pccp");
+      faces.map(([f, shade]) => ({ f, shade, d: f.reduce((t, i) => t + v[i].d, 0) / 4 }))
+        .sort((a, b) => a.d - b.d)
+        .forEach(({ f, shade }) => {
+          ctx.beginPath(); f.forEach((i, k) => k ? ctx.lineTo(v[i].x, v[i].y) : ctx.moveTo(v[i].x, v[i].y)); ctx.closePath();
+          ctx.fillStyle = base; ctx.fill();
+          if (shade) { ctx.fillStyle = `rgba(0,0,0,${shade})`; ctx.fill(); }
+          ctx.strokeStyle = css("--ink"); ctx.globalAlpha = .35; ctx.stroke(); ctx.globalAlpha = 1;
+        });
+      // dashed centerline on the top face
+      ctx.strokeStyle = css("--accent"); ctx.lineWidth = 2.5; ctx.setLineDash([10, 8]);
+      const c0 = P3(0.03 * X, Y / 2, Z), c1 = P3(0.97 * X, Y / 2, Z);
+      ctx.beginPath(); ctx.moveTo(c0.x, c0.y); ctx.lineTo(c1.x, c1.y); ctx.stroke(); ctx.setLineDash([]);
+      // dimension labels
+      ctx.fillStyle = css("--muted"); ctx.font = `11px ${css("--f-mono")}`;
+      const lab = (t, q) => { ctx.fillText(t, Math.max(4, Math.min(w - ctx.measureText(t).width - 4, q.x)), Math.max(12, Math.min(h - 22, q.y))); };
+      lab(`L ${fmtN(proj.length)} m`, P3(X / 2, -0.5, 0));
+      lab(`W ${proj.width} m`, P3(X + 0.12, Y / 2, 0));
+      lab(`T ${proj.thick} mm`, P3(0, Y, Z + 0.3));
+    }
+    addEventListener("resize", () => draw());
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => draw());
+    new MutationObserver(() => draw()).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return { setProject };
+  })();
+
+  /* ---------- scatter ---------- */
+  const svg = $("#scatter");
+  const W = 640, H = 420, m = { l: 56, r: 16, t: 14, b: 48 };
+  const lim = Math.ceil(maxActual / 1e6 / 10) * 10;
+  const sx = v => m.l + v / 1e6 / lim * (W - m.l - m.r);
+  const sy = v => H - m.b - v / 1e6 / lim * (H - m.t - m.b);
+  function renderScatter() {
+    let g = "";
+    for (let t = 0; t <= lim; t += 10) {
+      g += `<line x1="${sx(t * 1e6)}" x2="${sx(t * 1e6)}" y1="${m.t}" y2="${H - m.b}" stroke="var(--rule)" stroke-width="1"/>`;
+      g += `<line x1="${m.l}" x2="${W - m.r}" y1="${sy(t * 1e6)}" y2="${sy(t * 1e6)}" stroke="var(--rule)" stroke-width="1"/>`;
+      g += `<text x="${sx(t * 1e6)}" y="${H - m.b + 18}" text-anchor="middle">${t}</text>`;
+      g += `<text x="${m.l - 8}" y="${sy(t * 1e6) + 4}" text-anchor="end">${t}</text>`;
+    }
+    g += `<text x="${(W + m.l - m.r) / 2}" y="${H - 8}" text-anchor="middle">Expected cost (₱ millions)</text>`;
+    g += `<text transform="translate(14 ${(H - m.b + m.t) / 2}) rotate(-90)" text-anchor="middle">Actual cost, 2019 prices (₱ millions)</text>`;
+    g += `<line x1="${sx(0)}" y1="${sy(0)}" x2="${sx(lim * 1e6)}" y2="${sy(lim * 1e6)}" stroke="var(--muted)" stroke-dasharray="5 5" stroke-width="1"/>`;
+    const order = { NONE: 0, MODERATE: 1, HIGH: 2 };
+    P.slice().sort((a, b) => order[a.flag] - order[b.flag]).forEach(p => {
+      const col = p.flag === "HIGH" ? "var(--high)" : p.flag === "MODERATE" ? "var(--mod)" : "var(--none)";
+      const sel = p.ref === state.sel;
+      g += `<circle class="dot" data-ref="${p.ref}" cx="${sx(p.predicted).toFixed(1)}" cy="${sy(p.actual).toFixed(1)}" r="${p.flag === "NONE" ? 4.5 : 6.5}" fill="${col}" fill-opacity="${p.flag === "NONE" ? .55 : .95}" stroke="${sel ? "var(--ink)" : "var(--panel)"}" stroke-width="${sel ? 2.5 : 1}"><title>${p.ref} · ${esc(p.muni)} — expected ₱${fmtM(p.predicted)}M, actual ₱${fmtM(p.actual)}M</title></circle>`;
+    });
+    const s = P.find(p => p.ref === state.sel);
+    g += `<circle cx="${sx(s.predicted)}" cy="${sy(s.actual)}" r="11" fill="none" stroke="var(--accent)" stroke-width="2"/>`;
+    svg.innerHTML = g;
+  }
+  svg.addEventListener("click", e => { const c = e.target.closest(".dot"); if (!c) return; const p = P.find(x => x.ref === c.dataset.ref); if (p.flag === "NONE" && state.filter !== "ALL") { state.filter = "ALL"; document.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-pressed", x.dataset.f === "ALL")); } renderTable(); select(c.dataset.ref, true); });
+
+  /* ---------- models ---------- */
+  const mlr = M.mlr, xgb = M.xgboost;
+  const better = (a, b, hi) => hi ? (a > b) : (a < b);
+  const row = (name, k, f, hi) => `<tr><td>${name}</td><td class="num r ${better(mlr[k], xgb[k], hi) ? "best" : ""}">${f(mlr[k])}</td><td class="num r ${better(xgb[k], mlr[k], hi) ? "best" : ""}">${f(xgb[k])}</td></tr>`;
+  $("#mtable").innerHTML = `<thead><tr><th>5-fold CV mean</th><th class="r">Linear (MLR)</th><th class="r">XGBoost</th></tr></thead><tbody>
+    ${row("MAE (₱)", "cv_mae_mean", v => fmtN(v))}
+    ${row("RMSE (₱)", "cv_rmse_mean", v => fmtN(v))}
+    ${row("R²", "cv_r2_mean", v => v.toFixed(3), true)}</tbody>`;
+  const mlrWins = mlr.cv_r2_mean > xgb.cv_r2_mean;
+  $("#mnote").textContent = (mlrWins
+    ? `On this ${M.n_projects}-project synthetic sample, the linear baseline scored better than XGBoost on every metric.`
+    : `On this ${M.n_projects}-project synthetic sample, XGBoost scored better than the linear baseline.`) +
+    " Small samples can favour simpler models, so the study reports both instead of picking the winner after the fact. The underlined value is the better one.";
+  const imp = Object.entries(M.xgboost_feature_importances).sort((a, b) => b[1] - a[1]);
+  const names = { geometry_sqm: "Paving area", surface_thickness_mm: "Surface thickness", duration_days: "Duration", publish_year: "Year", scope_flag_ancillary: "Non-road works", surface_is_pccp: "Surface type" };
+  $("#imp").innerHTML = imp.map(([k, v]) => `<div class="bar-row"><span style="font-size:13px">${names[k] || k}</span><div class="bar-track"><div class="bar-fill" style="width:${(v / imp[0][1] * 100).toFixed(1)}%;background:var(--accent)"></div></div><span class="num" style="text-align:right;font-size:13px">${(v * 100).toFixed(0)}%</span></div>`).join("");
+
+  renderTable();
+  renderDetail();
+  renderScatter();
+})();
+</script>
+</body>
+</html>
